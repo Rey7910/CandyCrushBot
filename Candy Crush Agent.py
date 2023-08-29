@@ -1,6 +1,6 @@
 import pyautogui
 import time
-from PIL import ImageGrab
+import mss
 
 
 def Click():
@@ -16,20 +16,6 @@ def Click():
     pyautogui.click()
 
 
-def shoot_ss():
-
-    # Define limits per each side of the screen (izquierda, superior, derecha, inferior)
-    bounding_box = (100, 100, 500, 500)
-
-    # Capture the specific region throughout the screen
-    screenshot = ImageGrab.grab(bbox=bounding_box)
-
-    # Resize the image to a lower resolution
-    #resized_screenshot = screenshot.resize((320, 240))
-
-    # Save the image
-    #resized_screenshot.save("captura_baja_resolucion.png")
-
 def pyautogui_ss():
         # Tomar una captura de pantalla completa
     screenshot = pyautogui.screenshot()
@@ -39,5 +25,19 @@ def pyautogui_ss():
 
 
 
+'''
 pyautogui_ss()
-Click()
+Click()'''
+
+
+with mss.mss() as sct:
+    # The screen part to capture
+    monitor = {"top": 160, "left": 160, "width": 160, "height": 135}
+    output = "sct-{top}x{left}_{width}x{height}.png".format(**monitor)
+
+    # Grab the data
+    sct_img = sct.grab(monitor)
+
+    # Save to the picture file
+    mss.tools.to_png(sct_img.rgb, sct_img.size, output=output)
+    print(output)
