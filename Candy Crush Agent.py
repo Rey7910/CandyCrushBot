@@ -1,19 +1,5 @@
-import pyautogui
-import time
 import mss
 
-
-def Click():
-    # Wait a period of time before continue with the rest of code
-    time.sleep(5)
-
-    # Click cordenates
-    x_coord = 500
-    y_coord = 500
-
-    # Move the mouse and click
-    pyautogui.moveTo(x_coord, y_coord)
-    pyautogui.click()
 
 
 def pyautogui_ss():
@@ -32,7 +18,7 @@ Click()'''
 
 with mss.mss() as sct:
     # The screen part to capture
-    monitor = {"top": 160, "left": 160, "width": 160, "height": 135}
+    monitor = {"top": 160, "left": 19, "width": 180, "height": 900}
     output = "sct-{top}x{left}_{width}x{height}.png".format(**monitor)
 
     # Grab the data
