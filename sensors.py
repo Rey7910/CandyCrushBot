@@ -1,6 +1,13 @@
 import mss
 import time
 
+# Acer Nitro 5 (Full Screen) Configuration - Rey
+
+top=80
+left=130
+width=710
+height=710
+
 def screen_recognition():
     with mss.mss() as sct:
         monitor = {"top": 160, "left": 160, "width": 160, "height": 135}
@@ -17,8 +24,9 @@ def screen_recognition():
 def shoot_ss():
     
     with mss.mss() as sct:
+        time.sleep(3)
     # The screen part to capture
-        monitor = {"top": 80, "left": 130, "width": 710, "height": 710}
+        monitor = {"top": top, "left": left, "width": width, "height": height}
         output = "sct-{top}x{left}_{width}x{height}.png".format(**monitor)
 
         # Grab the data
