@@ -47,7 +47,7 @@ def identify_candy(r,g,b):
         elif(r>=6800 and g<=150 and b<=150):
             print("Red found")
 
-        elif(r<=2000 and g>=4000 and g<=6000 and b>=8900):
+        elif(r<=2300 and g>=4000 and g<=6000 and b>=8900):
             print("Blue found")
         
         elif(r>=8500 and r<9150 and g>=6500 and b<=3500):
