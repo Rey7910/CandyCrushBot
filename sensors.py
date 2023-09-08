@@ -38,28 +38,37 @@ def shoot_ss():
         print(output)
 
 
+def identify_special_candy(r,g,b):
+
+    
+    print("({},{},{})".format(r,g,b))
+
+    print("Special candy")
+
+
 def identify_candy(r,g,b):
         #print("({},{},{})".format(r,g,b))
 
-        if((r>=1500 and r<=2300) and (g>=5300 and g<=6700) and (b>=0 and b<=150)):
+        if((r>=1450 and r<=2300) and (g>=5300 and g<=6700) and (b>=0 and b<=150)):
             print("Green found")
-        
+            #print("({},{},{})".format(r,g,b))
         elif(r>=6800 and g<=150 and b<=150):
             print("Red found")
-
+            #print("({},{},{})".format(r,g,b))
         elif(r<=2300 and g>=4000 and g<=6000 and b>=8900):
             print("Blue found")
-        
-        elif(r>=8500 and r<9150 and g>=6500 and b<=3500):
+            #print("({},{},{})".format(r,g,b))
+        elif(r>=8500 and r<9150 and g>=6300 and b<=3500):
             print("Yellow found")
             #print("({},{},{})".format(r,g,b))
-        elif(r>=8800 and g>=4500 and b<=5500):
+        elif(r>=9000 and g>=4500 and b<=5500):
             print("Orange found")
             #print("({},{},{})".format(r,g,b))
-        elif(r>=6000 and g<=3500 and b>=8800):
+        elif(r>=6000 and g<=3500 and b>=9170):
             print("Violet found")
+            #print("({},{},{})".format(r,g,b))
         else:
-            print("({},{},{})".format(r,g,b))
+            identify_special_candy(r,g,b)
 
 
 def recognize_image():
