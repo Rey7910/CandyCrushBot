@@ -15,9 +15,11 @@ BOOM_PURPLE = 23
 
 CHOCO = 66
 
+
 class BoardSolver:
     def __init__(self) -> None:
         pass
 
-    def solve(self, board:'Matrix', specialLocs:tuple = ()) -> tuple:
+    def solve(self, board: list, specialLocs: tuple = ()) -> tuple:
         pass
+
