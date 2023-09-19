@@ -37,8 +37,8 @@ BOARD3 = [[4, 0, 3, 3, 0, 5, 1, 4, 5],
 
 SPECIAL_LOCS3 = ((1, 7), (7, 5), (8, 5))
 
-print(SPECIAL_LOCS3)
+print(SPECIAL_LOCS1)
 agent = BoardSolver.BoardSolver()
-movement = agent.solve(BOARD3, SPECIAL_LOCS3)
+movement = agent.solve(BOARD1, SPECIAL_LOCS1)
 
 print(movement)

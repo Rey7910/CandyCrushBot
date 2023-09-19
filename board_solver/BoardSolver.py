@@ -50,18 +50,8 @@ class BoardSolver:
                 return movement
 
             if self.basic[0] == ():
-                if self.checkBasic1(specialLoc[0], specialLoc[1],
-                                    self.board[specialLoc[0]][specialLoc[1]]):
-                    pass
-                elif self.checkBasic2(specialLoc[0], specialLoc[1],
-                                      self.board[specialLoc[0]][specialLoc[1]]):
-                    pass
-                elif self.checkBasic3(specialLoc[0], specialLoc[1],
-                                      self.board[specialLoc[0]][specialLoc[1]]):
-                    pass
-                elif self.checkBasic4(specialLoc[0], specialLoc[1],
-                                      self.board[specialLoc[0]][specialLoc[1]]):
-                    pass
+                self.checkBasic(specialLoc[0], specialLoc[1],
+                                self.board[specialLoc[0]][specialLoc[1]])
 
             self.checkBoard[specialLoc[0]][specialLoc[1]] = True
 
@@ -71,21 +61,35 @@ class BoardSolver:
                 if not self.checkBoard[nr][nc]:
 
                     if self.basic[1] == ():
-                        if self.checkBasic1(nr, nc, self.board[nr][nc]):
-                            pass
-                        elif self.checkBasic2(nr, nc, self.board[nr][nc]):
-                            pass
-                        elif self.checkBasic3(nr, nc, self.board[nr][nc]):
-                            pass
-                        elif self.checkBasic4(nr, nc, self.board[nr][nc]):
-                            pass
-
-                        print(self.basic[1])
+                        self.checkBasic(nr, nc, self.board[nr][nc])
 
         # Returns a basic movement if there's no better option
         if self.basic[0] != ():
             return self.basic[0]
         return self.basic[1]
+
+    def checkBasic(self, r: int, c: int, kind: int) -> None:
+        if self.checkBasic1(r, c, kind):
+            pass
+        elif self.checkBasic2(r, c, kind):
+            pass
+        elif self.checkBasic3(r, c, kind):
+            pass
+        elif self.checkBasic4(r, c, kind):
+            pass
+
+    """def searchZone(self, r: int, c: int) -> tuple:
+        cornerR = r-2
+        cornerC = c-2
+
+        for i in range(9):
+            sr = cornerR+i
+
+            if sr >= 0 and sr < 9:
+                for j in range(9):
+                    sc = cornerC+j
+
+                    if sc >= 0 and sc < 9 and not self.checkBoard[sr][sc]:"""
 
     def checkSpecial(self, r: int, c: int) -> tuple:
         for i in range(4):
