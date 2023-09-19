@@ -2,22 +2,29 @@ ORANGE = 0
 BLUE = 1
 RED = 2
 PURPLE = 3
+YELLOW = 4
+GREEN = 5
 
 LINE_ORANGE = 10
 LINE_BLUE = 11
 LINE_RED = 12
 LINE_PURPLE = 13
+LINE_YELLOW = 14
+LINE_GREEN = 15
 
 BOOM_ORANGE = 20
 BOOM_BLUE = 21
 BOOM_RED = 22
 BOOM_PURPLE = 23
+BOOM_YELLOW = 24
+BOOM_GREEN = 25
 
 CHOCO = 66
 
 
 class BoardSolver:
     def __init__(self) -> None:
+        self.board = []
         self.checkBoard = [[False for c in range(9)] for r in range(9)]
         '''
             0. Up
@@ -26,64 +33,307 @@ class BoardSolver:
             3. Right
         '''
         self.dy = (-1, 1, 0, 0)
-        self.dy = (0, 0, -1, 1)
-        self.basic = (0, 0)
+        self.dx = (0, 0, -1, 1)
+        self.basic = [(), ()]
 
-    def solve(self, board: list, specialLocs: tuple = ()) -> tuple:
+    def solve(self, board: list, specialLocs: list = ()) -> tuple:
         # Initializes the internal check board
+        self.board = board
         for r in range(9):
             for c in range(9):
                 self.checkBoard[r][c] = False
 
-    def checkSpecial(self, r: int, c: int, board: list) -> tuple:
+        # Checks around the special candies
+        for specialLoc in specialLocs:
+            movement = self.checkSpecial(specialLoc[0], specialLoc[1])
+            if movement != ():
+                return movement
+
+            if self.basic[0] == ():
+                if self.checkBasic1(specialLoc[0], specialLoc[1],
+                                    self.board[specialLoc[0]][specialLoc[1]]):
+                    pass
+                elif self.checkBasic2(specialLoc[0], specialLoc[1],
+                                      self.board[specialLoc[0]][specialLoc[1]]):
+                    pass
+                elif self.checkBasic3(specialLoc[0], specialLoc[1],
+                                      self.board[specialLoc[0]][specialLoc[1]]):
+                    pass
+                elif self.checkBasic4(specialLoc[0], specialLoc[1],
+                                      self.board[specialLoc[0]][specialLoc[1]]):
+                    pass
+
+            self.checkBoard[specialLoc[0]][specialLoc[1]] = True
+
+        # Checks the rest of the board
+        for nr in range(9):
+            for nc in range(9):
+                if not self.checkBoard[nr][nc]:
+
+                    if self.basic[1] == ():
+                        if self.checkBasic1(nr, nc, self.board[nr][nc]):
+                            pass
+                        elif self.checkBasic2(nr, nc, self.board[nr][nc]):
+                            pass
+                        elif self.checkBasic3(nr, nc, self.board[nr][nc]):
+                            pass
+                        elif self.checkBasic4(nr, nc, self.board[nr][nc]):
+                            pass
+
+                        print(self.basic[1])
+
+        # Returns a basic movement if there's no better option
+        if self.basic[0] != ():
+            return self.basic[0]
+        return self.basic[1]
+
+    def checkSpecial(self, r: int, c: int) -> tuple:
         for i in range(4):
             nr = r + self.dy[i]
             nc = c + self.dx[i]
 
             if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
-                if board[nr][nc] >= 10:
-                    return (self.dy[i], self.dx[i])
+                if self.board[nr][nc] >= 10:
+                    return ((r, c), (self.dy[i], self.dx[i]))
 
         return ()
 
-    def checkBasic(self, r: int, c: int, kind: int, board: list) -> tuple:
+    def checkBasic3(self, r: int, c: int, kind: int) -> bool:
+        ckind = kind % 10
+
         # Up
         nr = r-1
         nc = c
         if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
-            if nc-1 >= 0 and \
-               board[nr][nc-1] % 10 == kind % 10 and \
-               nc+1 < 9 and \
-               board[nr][nc+1] % 10 == kind % 10:
+            if (nc-1 >= 0 and
+                    self.board[nr][nc-1] % 10 == ckind and
+                    nc+1 < 9 and
+                    self.board[nr][nc+1] % 10 == ckind):
                 if kind >= 10:
-                    return (-1, 0)
+                    self.basic[0] = ((r, c), (-1, 0))
 
-                self.basic = (-1, 0)
+                self.basic[1] = ((r, c), (-1, 0))
+
+                return True
 
         # Down
         nr = r+1
         nc = c
         if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
-            if nc-1 >= 0 and \
-               board[nr][nc-1] % 10 == kind % 10 and \
-               nc+1 < 9 and \
-               board[nr][nc+1] % 10 == kind % 10:
+            if (nc-1 >= 0 and
+                    self.board[nr][nc-1] % 10 == ckind and
+                    nc+1 < 9 and
+                    self.board[nr][nc+1] % 10 == ckind):
                 if kind >= 10:
-                    return (1, 0)
+                    self.basic[0] = ((r, c), (1, 0))
 
-                self.basic = (1, 0)
+                self.basic[1] = ((r, c), (1, 0))
+
+                return True
 
         # Left
         nr = r
         nc = c-1
         if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
-            if nr-1 >= 0 and \
-               board[nr-1][nc] % 10 == kind % 10 and \
-               nr+1 < 9 and \
-               board[nr+1][nc] % 10 == kind % 10:
+            if (nr-1 >= 0 and
+                    self.board[nr-1][nc] % 10 == ckind and
+                    nr+1 < 9 and
+                    self.board[nr+1][nc] % 10 == ckind):
                 if kind >= 10:
-                    return (0, -1)
+                    self.basic[0] = ((r, c), (0, -1))
 
-                self.basic = (0, -1)
+                self.basic[1] = ((r, c), (0, -1))
 
-        return ()
+                return True
+
+        # Right
+        nr = r
+        nc = c+1
+        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+            if (nr-1 >= 0 and
+                    self.board[nr-1][nc] % 10 == ckind and
+                    nr+1 < 9 and
+                    self.board[nr+1][nc] % 10 == ckind):
+                if kind >= 10:
+                    self.basic[0] = ((r, c), (0, 1))
+
+                self.basic[1] = ((r, c), (0, 1))
+
+                return True
+
+    def checkBasic2(self, r: int, c: int, kind: int) -> bool:
+        ckind = kind % 10
+
+        # Up
+        nr = r-1
+        nc = c
+        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+            if (nc-2 >= 0 and
+                    self.board[nr][nc-2] % 10 == ckind and
+                    self.board[nr][nc-1] % 10 == ckind):
+                if kind >= 10:
+                    self.basic[0] = ((r, c), (-1, 0))
+
+                self.basic[1] = ((r, c), (-1, 0))
+
+                return True
+
+        # Down
+        nr = r+1
+        nc = c
+        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+            if (nc+2 < 9 and
+                    self.board[nr][nc+1] % 10 == ckind and
+                    self.board[nr][nc+2] % 10 == ckind):
+                if kind >= 10:
+                    self.basic[0] = ((r, c), (1, 0))
+
+                self.basic[1] = ((r, c), (1, 0))
+
+                return True
+
+        # Left
+        nr = r
+        nc = c-1
+        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+            if (nr+2 < 9 and
+                    self.board[nr+2][nc] % 10 == ckind and
+                    self.board[nr+1][nc] % 10 == ckind):
+                if kind >= 10:
+                    self.basic[0] = ((r, c), (0, -1))
+
+                self.basic[1] = ((r, c), (0, -1))
+
+                return True
+
+        # Right
+        nr = r
+        nc = c+1
+        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+            if (nr-2 >= 0 and
+                    self.board[nr-2][nc] % 10 == ckind and
+                    self.board[nr-1][nc] % 10 == ckind):
+                if kind >= 10:
+                    self.basic[0] = ((r, c), (0, 1))
+
+                self.basic[1] = ((r, c), (0, 1))
+
+                return True
+
+    def checkBasic1(self, r: int, c: int, kind: int) -> bool:
+        ckind = kind % 10
+
+        # Up
+        nr = r-1
+        nc = c
+        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+            if (nc+2 < 9 and
+                    self.board[nr][nc+2] % 10 == ckind and
+                    self.board[nr][nc+1] % 10 == ckind):
+                if kind >= 10:
+                    self.basic[0] = ((r, c), (-1, 0))
+
+                self.basic[1] = ((r, c), (-1, 0))
+
+                return True
+
+        # Down
+        nr = r+1
+        nc = c
+        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+            if (nc-2 >= 0 and
+                    self.board[nr][nc-1] % 10 == ckind and
+                    self.board[nr][nc-2] % 10 == ckind):
+                if kind >= 10:
+                    self.basic[0] = ((r, c), (1, 0))
+
+                self.basic[1] = ((r, c), (1, 0))
+
+                return True
+
+        # Left
+        nr = r
+        nc = c-1
+        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+            if (nr-2 >= 0 and
+                    self.board[nr-2][nc] % 10 == ckind and
+                    self.board[nr-1][nc] % 10 == ckind):
+                if kind >= 10:
+                    self.basic[0] = ((r, c), (0, -1))
+
+                self.basic[1] = ((r, c), (0, -1))
+
+                return True
+
+        # Right
+        nr = r
+        nc = c+1
+        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+            if (nr+2 < 9 and
+                    self.board[nr+2][nc] % 10 == ckind and
+                    self.board[nr+1][nc] % 10 == ckind):
+                if kind >= 10:
+                    self.basic[0] = ((r, c), (0, 1))
+
+                self.basic[1] = ((r, c), (0, 1))
+
+                return True
+
+    def checkBasic4(self, r: int, c: int, kind: int) -> bool:
+        ckind = kind % 10
+
+        # Up
+        nr = r-1
+        nc = c
+        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+            if (nr-2 >= 0 and
+                    self.board[nr-2][nc] % 10 == ckind and
+                    self.board[nr-1][nc] % 10 == ckind):
+                if kind >= 10:
+                    self.basic[0] = ((r, c), (-1, 0))
+
+                self.basic[1] = ((r, c), (-1, 0))
+
+                return True
+
+        # Down
+        nr = r+1
+        nc = c
+        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+            if (nr+2 < 9 and
+                    self.board[nr+2][nc] % 10 == ckind and
+                    self.board[nr+1][nc] % 10 == ckind):
+                if kind >= 10:
+                    self.basic[0] = ((r, c), (1, 0))
+
+                self.basic[1] = ((r, c), (1, 0))
+
+                return True
+
+        # Left
+        nr = r
+        nc = c-1
+        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+            if (nc-2 >= 0 and
+                    self.board[nr][nc-2] % 10 == ckind and
+                    self.board[nr][nc-1] % 10 == ckind):
+                if kind >= 10:
+                    self.basic[0] = ((r, c), (0, -1))
+
+                self.basic[1] = ((r, c), (0, -1))
+
+                return True
+
+        # Right
+        nr = r
+        nc = c+1
+        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+            if (nc+2 < 9 and
+                    self.board[nr][nc+2] % 10 == ckind and
+                    self.board[nr][nc+1] % 10 == ckind):
+                if kind >= 10:
+                    self.basic[0] = ((r, c), (0, 1))
+
+                self.basic[1] = ((r, c), (0, 1))
+
+                return True
