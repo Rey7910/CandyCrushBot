@@ -43,7 +43,7 @@ class BoardSolver:
             for c in range(9):
                 self.checkBoard[r][c] = False
 
-        # Checks around the special candies
+        # Checks the special candies
         for specialLoc in specialLocs:
             movement = self.checkSpecial(specialLoc[0], specialLoc[1])
             if movement != ():
@@ -54,6 +54,9 @@ class BoardSolver:
                                 self.board[specialLoc[0]][specialLoc[1]])
 
             self.checkBoard[specialLoc[0]][specialLoc[1]] = True
+
+            # Checks in the surroundings of the special candy
+            self.searchZone(specialLoc[0], specialLoc[1])
 
         # Checks the rest of the board
         for nr in range(9):
@@ -78,7 +81,7 @@ class BoardSolver:
         elif self.checkBasic4(r, c, kind):
             pass
 
-    """def searchZone(self, r: int, c: int) -> tuple:
+    def searchZone(self, r: int, c: int) -> tuple:
         cornerR = r-2
         cornerC = c-2
 
@@ -89,7 +92,11 @@ class BoardSolver:
                 for j in range(9):
                     sc = cornerC+j
 
-                    if sc >= 0 and sc < 9 and not self.checkBoard[sr][sc]:"""
+                    if sc >= 0 and sc < 9 and not self.checkBoard[sr][sc]:
+                        if self.basic[1] == ():
+                            self.checkBasic(sr, sc, self.board[sr][sc])
+
+                        self.checkBoard[sr][sc] = True
 
     def checkSpecial(self, r: int, c: int) -> tuple:
         for i in range(4):
