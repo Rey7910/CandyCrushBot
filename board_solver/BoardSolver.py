@@ -18,8 +18,10 @@ CHOCO = 66
 
 class BoardSolver:
     def __init__(self) -> None:
-        pass
+        self.checkBoard = [[False for c in range(9)] for r in range(9)]
 
     def solve(self, board: list, specialLocs: tuple = ()) -> tuple:
-        pass
-
+        # Initializes the internal check board
+        for r in range(9):
+            for c in range(9):
+                self.checkBoard[r][c] = False
