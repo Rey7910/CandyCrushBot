@@ -117,6 +117,10 @@ class BoardSolver:
         if movement != ():
             return movement
 
+        movement = self.check4(r, c, self.board[r][c])
+        if movement != ():
+            return movement
+
         return ()
 
     def checkBasic(self, r: int, c: int, kind: int) -> None:
@@ -128,6 +132,79 @@ class BoardSolver:
             pass
         elif self.checkBasic4(r, c, kind):
             pass
+
+    def check4(self, r: int, c: int, kind: int) -> tuple:
+        ckind = kind % 10
+
+        # Up
+        nr = r-1
+        nc = c
+        if nr >= 0:
+            if ((nc-2 >= 0 and
+                    nc+1 < 9 and
+                    self.board[nr][nc-1] % 10 == ckind and
+                    self.board[nr][nc-2] % 10 == ckind and
+                    self.board[nr][nc+1] % 10 == ckind)
+                or
+                (nc+2 < 9 and
+                    nc-1 >= 0 and
+                    self.board[nr][nc+1] % 10 == ckind and
+                    self.board[nr][nc+2] % 10 == ckind and
+                    self.board[nr][nc-1] % 10 == ckind)):
+                return ((r, c), (-1, 0))
+
+        # Down
+        nr = r+1
+        nc = c
+        if nr < 9:
+            if ((nc-2 >= 0 and
+                    nc+1 < 9 and
+                    self.board[nr][nc-1] % 10 == ckind and
+                    self.board[nr][nc-2] % 10 == ckind and
+                    self.board[nr][nc+1] % 10 == ckind)
+                or
+                (nc+2 < 9 and
+                    nc-1 >= 0 and
+                    self.board[nr][nc+1] % 10 == ckind and
+                    self.board[nr][nc+2] % 10 == ckind and
+                    self.board[nr][nc-1] % 10 == ckind)):
+                return ((r, c), (1, 0))
+
+        # Left
+        nr = r
+        nc = c-1
+        if nc >= 0:
+            if ((nr-2 >= 0 and
+                    nr+1 < 9 and
+                    self.board[nr-1][nc] % 10 == ckind and
+                    self.board[nr-2][nc] % 10 == ckind and
+                    self.board[nr+1][nc] % 10 == ckind)
+                or
+                (nr+2 < 9 and
+                    nr-1 >= 0 and
+                    self.board[nr+1][nc] % 10 == ckind and
+                    self.board[nr+2][nc] % 10 == ckind and
+                    self.board[nr-1][nc] % 10 == ckind)):
+                return ((r, c), (0, -1))
+
+        # Right
+        nr = r
+        nc = c+1
+        if nc < 9:
+            if ((nr-2 >= 0 and
+                    nr+1 < 9 and
+                    self.board[nr-1][nc] % 10 == ckind and
+                    self.board[nr-2][nc] % 10 == ckind and
+                    self.board[nr+1][nc] % 10 == ckind)
+                or
+                (nr+2 < 9 and
+                    nr-1 >= 0 and
+                    self.board[nr+1][nc] % 10 == ckind and
+                    self.board[nr+2][nc] % 10 == ckind and
+                    self.board[nr-1][nc] % 10 == ckind)):
+                return ((r, c), (0, 1))
+
+        return ()
 
     def checkL(self, r: int, c: int, kind: int) -> tuple:
         ckind = kind % 10
