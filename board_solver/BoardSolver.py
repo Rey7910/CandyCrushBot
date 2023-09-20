@@ -81,6 +81,15 @@ class BoardSolver:
         elif self.checkBasic4(r, c, kind):
             pass
 
+    def checkChoco(self, r: int, c: int, kind: int) -> tuple:
+        ckind = kind % 10
+
+        # Up
+        nr = r-1
+        nc = c
+        if (nr >= 0 and nr):
+            pass
+
     def searchZone(self, r: int, c: int) -> tuple:
         cornerR = r-2
         cornerC = c-2
@@ -115,7 +124,7 @@ class BoardSolver:
         # Up
         nr = r-1
         nc = c
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nr >= 0:
             if (nc-1 >= 0 and
                     self.board[nr][nc-1] % 10 == ckind and
                     nc+1 < 9 and
@@ -130,7 +139,7 @@ class BoardSolver:
         # Down
         nr = r+1
         nc = c
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nr < 9:
             if (nc-1 >= 0 and
                     self.board[nr][nc-1] % 10 == ckind and
                     nc+1 < 9 and
@@ -145,7 +154,7 @@ class BoardSolver:
         # Left
         nr = r
         nc = c-1
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nc >= 0:
             if (nr-1 >= 0 and
                     self.board[nr-1][nc] % 10 == ckind and
                     nr+1 < 9 and
@@ -160,7 +169,7 @@ class BoardSolver:
         # Right
         nr = r
         nc = c+1
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nc < 9:
             if (nr-1 >= 0 and
                     self.board[nr-1][nc] % 10 == ckind and
                     nr+1 < 9 and
@@ -178,7 +187,7 @@ class BoardSolver:
         # Up
         nr = r-1
         nc = c
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nr >= 0:
             if (nc-2 >= 0 and
                     self.board[nr][nc-2] % 10 == ckind and
                     self.board[nr][nc-1] % 10 == ckind):
@@ -192,7 +201,7 @@ class BoardSolver:
         # Down
         nr = r+1
         nc = c
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nr < 9:
             if (nc+2 < 9 and
                     self.board[nr][nc+1] % 10 == ckind and
                     self.board[nr][nc+2] % 10 == ckind):
@@ -206,7 +215,7 @@ class BoardSolver:
         # Left
         nr = r
         nc = c-1
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nc >= 0:
             if (nr+2 < 9 and
                     self.board[nr+2][nc] % 10 == ckind and
                     self.board[nr+1][nc] % 10 == ckind):
@@ -220,7 +229,7 @@ class BoardSolver:
         # Right
         nr = r
         nc = c+1
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nc < 9:
             if (nr-2 >= 0 and
                     self.board[nr-2][nc] % 10 == ckind and
                     self.board[nr-1][nc] % 10 == ckind):
@@ -237,7 +246,7 @@ class BoardSolver:
         # Up
         nr = r-1
         nc = c
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nr >= 0:
             if (nc+2 < 9 and
                     self.board[nr][nc+2] % 10 == ckind and
                     self.board[nr][nc+1] % 10 == ckind):
@@ -251,7 +260,7 @@ class BoardSolver:
         # Down
         nr = r+1
         nc = c
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nr < 9:
             if (nc-2 >= 0 and
                     self.board[nr][nc-1] % 10 == ckind and
                     self.board[nr][nc-2] % 10 == ckind):
@@ -265,7 +274,7 @@ class BoardSolver:
         # Left
         nr = r
         nc = c-1
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nc >= 0:
             if (nr-2 >= 0 and
                     self.board[nr-2][nc] % 10 == ckind and
                     self.board[nr-1][nc] % 10 == ckind):
@@ -279,7 +288,7 @@ class BoardSolver:
         # Right
         nr = r
         nc = c+1
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nc < 9:
             if (nr+2 < 9 and
                     self.board[nr+2][nc] % 10 == ckind and
                     self.board[nr+1][nc] % 10 == ckind):
@@ -296,7 +305,7 @@ class BoardSolver:
         # Up
         nr = r-1
         nc = c
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nr >= 0:
             if (nr-2 >= 0 and
                     self.board[nr-2][nc] % 10 == ckind and
                     self.board[nr-1][nc] % 10 == ckind):
@@ -310,7 +319,7 @@ class BoardSolver:
         # Down
         nr = r+1
         nc = c
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nr < 9:
             if (nr+2 < 9 and
                     self.board[nr+2][nc] % 10 == ckind and
                     self.board[nr+1][nc] % 10 == ckind):
@@ -324,7 +333,7 @@ class BoardSolver:
         # Left
         nr = r
         nc = c-1
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nc >= 0:
             if (nc-2 >= 0 and
                     self.board[nr][nc-2] % 10 == ckind and
                     self.board[nr][nc-1] % 10 == ckind):
@@ -338,7 +347,7 @@ class BoardSolver:
         # Right
         nr = r
         nc = c+1
-        if nr >= 0 and nr < 9 and nc >= 0 and nc < 9:
+        if nc < 9:
             if (nc+2 < 9 and
                     self.board[nr][nc+2] % 10 == ckind and
                     self.board[nr][nc+1] % 10 == ckind):
