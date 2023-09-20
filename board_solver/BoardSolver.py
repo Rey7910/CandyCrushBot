@@ -45,8 +45,15 @@ class BoardSolver:
 
         # Checks the special candies
         for specialLoc in specialLocs:
+            movement = self.checkChoco(specialLoc[0], specialLoc[1],
+                                        self.board[specialLoc[0]][specialLoc[1]])
+            if movement != ():
+                print(1)
+                return movement
+
             movement = self.checkSpecial(specialLoc[0], specialLoc[1])
             if movement != ():
+                print(2)
                 return movement
 
             if self.basic[0] == ():
@@ -56,12 +63,19 @@ class BoardSolver:
             self.checkBoard[specialLoc[0]][specialLoc[1]] = True
 
             # Checks in the surroundings of the special candy
-            self.searchZone(specialLoc[0], specialLoc[1])
+            movement = self.searchZone(specialLoc[0], specialLoc[1])
+            if movement != ():
+                print(3)
+                return movement
 
         # Checks the rest of the board
         for nr in range(9):
             for nc in range(9):
                 if not self.checkBoard[nr][nc]:
+                    movement = self.checkChoco(nr, nc, self.board[nr][nc])
+                    if movement != ():
+                        print(4)
+                        return movement
 
                     if self.basic[1] == ():
                         self.checkBasic(nr, nc, self.board[nr][nc])
@@ -87,8 +101,60 @@ class BoardSolver:
         # Up
         nr = r-1
         nc = c
-        if (nr >= 0 and nr):
-            pass
+        if nr >= 0:
+            if (nc-2 >= 0 and
+                    nc-1 >= 0 and
+                    nc+1 < 9 and
+                    nc+2 < 9 and
+                    self.board[nr][nc-2] % 10 == ckind and
+                    self.board[nr][nc-1] % 10 == ckind and
+                    self.board[nr][nc+1] % 10 == ckind and
+                    self.board[nr][nc+2] % 10 == ckind):
+                return ((r, c), (-1, 0))
+
+        # Down
+        nr = r+1
+        nc = c
+        if nr < 9:
+            if (nc-2 >= 0 and
+                    nc-1 >= 0 and
+                    nc+1 < 9 and
+                    nc+2 < 9 and
+                    self.board[nr][nc-2] % 10 == ckind and
+                    self.board[nr][nc-1] % 10 == ckind and
+                    self.board[nr][nc+1] % 10 == ckind and
+                    self.board[nr][nc+2] % 10 == ckind):
+                return ((r, c), (1, 0))
+
+        # Left
+        nr = r
+        nc = c-1
+        if nc >= 0:
+            if (nr-2 >= 0 and
+                    nr-1 >= 0 and
+                    nr+1 < 9 and
+                    nr+2 < 9 and
+                    self.board[nr-2][nc] % 10 == ckind and
+                    self.board[nr-1][nc] % 10 == ckind and
+                    self.board[nr+1][nc] % 10 == ckind and
+                    self.board[nr+2][nc] % 10 == ckind):
+                return ((r, c), (0, -1))
+
+        # Right
+        nr = r
+        nc = c+1
+        if nc < 9:
+            if (nr-2 >= 0 and
+                    nr-1 >= 0 and
+                    nr+1 < 9 and
+                    nr+2 < 9 and
+                    self.board[nr-2][nc] % 10 == ckind and
+                    self.board[nr-1][nc] % 10 == ckind and
+                    self.board[nr+1][nc] % 10 == ckind and
+                    self.board[nr+2][nc] % 10 == ckind):
+                return ((r, c), (0, 1))
+
+        return ()
 
     def searchZone(self, r: int, c: int) -> tuple:
         cornerR = r-2
@@ -102,10 +168,17 @@ class BoardSolver:
                     sc = cornerC+j
 
                     if sc >= 0 and sc < 9 and not self.checkBoard[sr][sc]:
+                        movement = self.checkChoco(sr, sc,
+                                                   self.board[sr][sc])
+                        if movement != ():
+                            return movement
+
                         if self.basic[1] == ():
                             self.checkBasic(sr, sc, self.board[sr][sc])
 
                         self.checkBoard[sr][sc] = True
+
+        return ()
 
     def checkSpecial(self, r: int, c: int) -> tuple:
         for i in range(4):
