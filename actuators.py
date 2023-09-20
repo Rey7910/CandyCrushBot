@@ -30,6 +30,8 @@ def move_candy(start_x, start_y,end_x,end_y):
 
 def crash_candy(x,y,direction):
 
+    time.sleep(5)
+
     # Pixel Direction of the movement to the right side
     if(direction=='right'):
         move_candy(x_reference+(x*x_growth_factor),y_reference+(y*y_growth_factor),x_reference+(x*x_growth_factor)+x_growth_factor,y_reference+(y*y_growth_factor))
@@ -66,4 +68,4 @@ def test_full_movements():
             crash_candy(x,y,'right')
 
 
-test_full_movements()
+crash_candy(1,4,'left')
