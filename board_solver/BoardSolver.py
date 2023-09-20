@@ -56,6 +56,12 @@ class BoardSolver:
                 print(2)
                 return movement
 
+            movement = self.checkT(specialLoc[0], specialLoc[1],
+                                   self.board[specialLoc[0]][specialLoc[1]])
+            if movement != ():
+                print(3)
+                return movement
+
             if self.basic[0] == ():
                 self.checkBasic(specialLoc[0], specialLoc[1],
                                 self.board[specialLoc[0]][specialLoc[1]])
@@ -65,7 +71,7 @@ class BoardSolver:
             # Checks in the surroundings of the special candy
             movement = self.searchZone(specialLoc[0], specialLoc[1])
             if movement != ():
-                print(3)
+                print(4)
                 return movement
 
         # Checks the rest of the board
@@ -74,7 +80,12 @@ class BoardSolver:
                 if not self.checkBoard[nr][nc]:
                     movement = self.checkChoco(nr, nc, self.board[nr][nc])
                     if movement != ():
-                        print(4)
+                        print(5)
+                        return movement
+
+                    movement = self.checkT(nr, nc, self.board[nr][nc])
+                    if movement != ():
+                        print(6)
                         return movement
 
                     if self.basic[1] == ():
@@ -85,6 +96,34 @@ class BoardSolver:
             return self.basic[0]
         return self.basic[1]
 
+    def searchZone(self, r: int, c: int) -> tuple:
+        cornerR = r-2
+        cornerC = c-2
+
+        for i in range(9):
+            sr = cornerR+i
+
+            if sr >= 0 and sr < 9:
+                for j in range(9):
+                    sc = cornerC+j
+
+                    if sc >= 0 and sc < 9 and not self.checkBoard[sr][sc]:
+                        movement = self.checkChoco(sr, sc,
+                                                   self.board[sr][sc])
+                        if movement != ():
+                            return movement
+
+                        movement = self.checkT(sr, sc, self.board[sr][sc])
+                        if movement != ():
+                            return movement
+
+                        if self.basic[1] == ():
+                            self.checkBasic(sr, sc, self.board[sr][sc])
+
+                        self.checkBoard[sr][sc] = True
+
+        return ()
+
     def checkBasic(self, r: int, c: int, kind: int) -> None:
         if self.checkBasic1(r, c, kind):
             pass
@@ -94,6 +133,63 @@ class BoardSolver:
             pass
         elif self.checkBasic4(r, c, kind):
             pass
+
+    def checkT(self, r: int, c: int, kind: int) -> tuple:
+        ckind = kind % 10
+
+        # Up
+        nr = r-1
+        nc = c
+        if nr >= 0:
+            if (nr-2 >= 0 and
+                    nc-1 >= 0 and
+                    nc+1 < 9 and
+                    self.board[nr-1][nc] % 10 == ckind and
+                    self.board[nr-2][nc] % 10 == ckind and
+                    self.board[nr][nc-1] % 10 == ckind and
+                    self.board[nr][nc+1] % 10 == ckind):
+                return ((r, c), (-1, 0))
+
+        # Down
+        nr = r+1
+        nc = c
+        if nr < 9:
+            if (nr+2 < 9 and
+                    nc-1 >= 0 and
+                    nc+1 < 9 and
+                    self.board[nr+1][nc] % 10 == ckind and
+                    self.board[nr+2][nc] % 10 == ckind and
+                    self.board[nr][nc-1] % 10 == ckind and
+                    self.board[nr][nc+1] % 10 == ckind):
+                return ((r, c), (1, 0))
+
+        # Left
+        nr = r
+        nc = c-1
+        if nc >= 0:
+            if (nc-2 >= 0 and
+                    nr-1 >= 0 and
+                    nr+1 < 9 and
+                    self.board[nr][nc-1] % 10 == ckind and
+                    self.board[nr][nc-2] % 10 == ckind and
+                    self.board[nr-1][nc] % 10 == ckind and
+                    self.board[nr+1][nc] % 10 == ckind):
+                return ((r, c), (0, -1))
+
+        # Right
+        nr = r
+        nc = c+1
+        if nc < 9:
+            if (nc+2 < 9 and
+                    nr-1 >= 0 and
+                    nr+1 < 9 and
+                    self.board[nr][nc+1] % 10 == ckind and
+                    self.board[nr][nc+2] % 10 == ckind and
+                    self.board[nr-1][nc] % 10 == ckind and
+                    self.board[nr+1][nc] % 10 == ckind):
+                return ((r, c), (0, 1))
+
+        return ()
 
     def checkChoco(self, r: int, c: int, kind: int) -> tuple:
         ckind = kind % 10
@@ -153,30 +249,6 @@ class BoardSolver:
                     self.board[nr+1][nc] % 10 == ckind and
                     self.board[nr+2][nc] % 10 == ckind):
                 return ((r, c), (0, 1))
-
-        return ()
-
-    def searchZone(self, r: int, c: int) -> tuple:
-        cornerR = r-2
-        cornerC = c-2
-
-        for i in range(9):
-            sr = cornerR+i
-
-            if sr >= 0 and sr < 9:
-                for j in range(9):
-                    sc = cornerC+j
-
-                    if sc >= 0 and sc < 9 and not self.checkBoard[sr][sc]:
-                        movement = self.checkChoco(sr, sc,
-                                                   self.board[sr][sc])
-                        if movement != ():
-                            return movement
-
-                        if self.basic[1] == ():
-                            self.checkBasic(sr, sc, self.board[sr][sc])
-
-                        self.checkBoard[sr][sc] = True
 
         return ()
 
