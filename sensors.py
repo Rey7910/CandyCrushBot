@@ -11,7 +11,7 @@ height=710
 
 def screen_recognition():
     with mss.mss() as sct:
-        monitor = {"top": 160, "left": 160, "width": 160, "height": 135}
+        monitor = {"top": 160, "left": 160, "width": 710, "height": 710}
         output = "sct-{top}x{left}_{width}x{height}.png".format(**monitor)
 
         # Grab the data
