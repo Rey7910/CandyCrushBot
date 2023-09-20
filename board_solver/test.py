@@ -181,8 +181,8 @@ BOARD15 = [[4, 0, 3, 3, 2, 5, 1, 4, 5],
 
 SPECIAL_LOCS15 = ()
 
-print(SPECIAL_LOCS15)
+print(SPECIAL_LOCS6)
 agent = BoardSolver.BoardSolver()
-movement = agent.solve(BOARD15, SPECIAL_LOCS15)
+movement = agent.solve(BOARD6, SPECIAL_LOCS6)
 
 print(movement)
