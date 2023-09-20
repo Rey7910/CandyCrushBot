@@ -35,13 +35,33 @@ class BoardSolver:
         self.dy = (-1, 1, 0, 0)
         self.dx = (0, 0, -1, 1)
         self.basic = [(), ()]
+        self.choco = ()
 
+    """
+        The board is stored as a list with the notation given above.
+
+        SpecialLocs is a list when there is only ONE special candy, a tuple
+        otherwise (it is more efficient to work with tuples). The special
+        candies must be ordered from higher priority to lower, this is:
+        1. Chocolates 2. Explosive 3. Line
+
+    """
     def solve(self, board: list, specialLocs: list = ()) -> tuple:
-        # Initializes the internal check board
+        # Initializes the internal states
         self.board = board
+        self.choco = ()
         for r in range(9):
             for c in range(9):
                 self.checkBoard[r][c] = False
+
+        # Stores the chocolate location if any for later emergency use
+        if len(specialLocs) > 0:
+            first = specialLocs[0]
+            if self.board[first[0]][first[1]] == CHOCO:
+                if first[0] == 0:
+                    self.choco = ((first[0], first[1]), (1, 0))
+                else:
+                    self.choco = ((first[0], first[1]), (-1, 0))
 
         # Checks the special candies
         for specialLoc in specialLocs:
@@ -79,7 +99,11 @@ class BoardSolver:
         # Returns a basic movement if there's no better option
         if self.basic[0] != ():
             return self.basic[0]
-        return self.basic[1]
+        elif self.basic[1] != ():
+            return self.basic[1]
+        else:
+            # Uses the chocolate when there's no other option
+            return self.choco
 
     def searchZone(self, r: int, c: int) -> tuple:
         cornerR = r-2
