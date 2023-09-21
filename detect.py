@@ -35,11 +35,16 @@ def identifyCandy(r,g,b):
 
     elif( r in range(1200,1276) and g in range(1000,1090) and b in range(130,200)):
         return 15 # "special yellow"
+    
+    elif( r in range(1200,1276) and g in range(650,750) and b in range(600,700)):
+        return 12 # "special red"
 
-    elif( r in range(400,700) and g in range(1000,1200) and b in range(1150,1260)):
+    elif( r in range(400,700) and g in range(940,1200) and b in range(1150,1260)):
+
         return 11 # "special blue"   
     
     elif( (r in range(400,700) and g in range(800,1100) and b in range(1000,1276)) or (r in range(1200,1250) and g in range(800,1100) and b in range(200,700))):
+        #print(r,g,b)
         return 10 #"special orange"
     
     elif( r in range(900,1200) and g in range(90,290) and b in range(1270,1276)):
@@ -70,7 +75,6 @@ def identifyCandy(r,g,b):
 
 
 def testSensor():
-    #time.sleep(3)
         
     #pic = pyautogui.screenshot(region = (125,60,790,690))
 
