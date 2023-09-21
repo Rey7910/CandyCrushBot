@@ -3,41 +3,68 @@ import time
 from PIL import Image, ImageDraw
 
 
+board_matrix = [
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+]
+
+def printMatrix(matrix):
+
+    for i in range(9):
+        for j in range(9):
+            print(matrix[i][j],end=" ")
+        print()
+
 
 def identifyCandy(r,g,b):
 
-    if(r in range(500,700) and g in range(350,450) and b in range(200,300)):
-        return "chocolate"
+    '''elif( r in range(1100,1276) and g in range(1000,1200) and b in range(700,1000)):
+        return 10 # "special orange" '''
 
-    elif( r in range(1100,1276) and g in range(1000,1200) and b in range(700,1000)):
-        return "special orange"
+
+    if(r in range(500,700) and g in range(350,450) and b in range(200,300)):
+        return 66 # "chocolate"
+
+    elif( r in range(1200,1276) and g in range(1000,1090) and b in range(130,200)):
+        return 15 # "special yellow"
+
+    elif( r in range(400,700) and g in range(1000,1200) and b in range(1150,1260)):
+        return 11 # "special blue"   
     
     elif( (r in range(400,700) and g in range(800,1100) and b in range(1000,1276)) or (r in range(1200,1250) and g in range(800,1100) and b in range(200,700))):
-        return "special orange"
+        return 10 #"special orange"
     
+    elif( r in range(900,1200) and g in range(90,290) and b in range(1270,1276)):
+        return 3 #"violet"
+
     elif( r in range(900,1100) and g in range(250,400) and b in range(1200,1276)):
-        return "special violet"
-    
-    elif( r in range(900,1000) and g in range(100,270) and b in range(1270,1276)):
-        return "violet"
+        return 13 #"special violet"
     
     elif( r in range(1220,1276) and g in range(900,1270) and b in range(0,270)):
-        return "yellow"
+        return 5 # "yellow"
     
     elif( r in range(1000,1276) and g in range(0,30) and b in range(0,10)):
-        return "red"
+        return 2 #"red"
     
     elif( r in range(200,280) and g in range(770,920) and b in range(0,10)):
-        return "green"
+        return 4 #"green"
     
     elif( r in range(1270,1276) and g in range(700,910) and b in range(50,400)):
-        return "orange"
+        return 0 #"orange"
     
     elif( r in range(100,255) and g in range(540,800) and b in range(1200,1276)):
-        return "blue"
+        return 1 #"blue"
     
     else:
-        return "no match"
+        return 100 #"no match"
 
 
 
@@ -63,14 +90,6 @@ def testSensor():
     total_r=0
     total_g=0
     total_b=0
-
-    max_blue_r=0
-    max_blue_g=0
-    max_blue_b=0
-
-    min_blue_r=256
-    min_blue_g=256
-    min_blue_b=256
 
     for x in range(45,width,88):
         
@@ -122,13 +141,18 @@ def testSensor():
             
             candy = identifyCandy(total_r,total_g,total_b)
 
+            
             #print("Candy[{}][{}] with({},{},{})".format(counter_y,counter_x,total_r,total_g,total_b))
 
-            if(candy=="no match"):
+            if(candy==100):
                 print("Candy[{}][{}] with({},{},{})".format(counter_y,counter_x,total_r,total_g,total_b))
+                
             
             else:
                 print("Candy[{}][{}]: {}".format(counter_y,counter_x,candy))
+
+
+            board_matrix[counter_y][counter_x]=candy
 
 
             counter_y+=1
@@ -143,6 +167,10 @@ def testSensor():
 
 
     image.save('game modified.png')
+    
+    printMatrix(board_matrix)
+
+
 
 
 
