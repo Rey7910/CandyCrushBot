@@ -34,18 +34,24 @@ def printMatrix(matrix):
 
 def identifyPackedCandy(r,g,b):
     if (r in range(80,150) and g in range(120,220) and b in range(50,130)):
+        print("my: ",r,g,b)
         return 24 # green packed candy
     
     elif(r in range(100,250) and g in range(70,150) and b in range(210,260)):
+        print("my: ",r,g,b)
         return 23 # violet packed candy
     
     elif(r in range(230,280) and g in range(150,250) and b in range(0,130)):
         print("my: ",r,g,b)
-        return 25 # orange packed candy
+        return 25 # yellow packed candy
 
     elif(r in range(160,350) and g in range(100,250) and b in range(0,150)):
         print("my: ",r,g,b)
         return 20 # orange packed candy
+    
+    elif(r in range(20,120) and g in range(100,250) and b in range(150,300)):
+        print("my: ",r,g,b)
+        return 21 # blue packed candy
     
     else:
         print(r,g,b)
@@ -56,6 +62,10 @@ def identifyCandy(r,g,b):
 
     '''elif( r in range(1100,1276) and g in range(1000,1200) and b in range(700,1000)):
         return 10 # "special orange" '''
+    
+    '''elif( (r in range(400,700) and g in range(800,1100) and b in range(1000,1276)) or (r in range(1200,1270) and g in range(800,1180) and b in range(200,900))):
+        print(r,g,b)
+        return 10 #"special orange"'''
 
 
     if(r in range(300,1000) and g in range(100,700) and b in range(30,400)):
@@ -74,10 +84,6 @@ def identifyCandy(r,g,b):
 
         return 11 # "special blue"   
     
-    elif( (r in range(400,700) and g in range(800,1100) and b in range(1000,1276)) or (r in range(1200,1270) and g in range(800,1140) and b in range(200,860))):
-        print(r,g,b)
-        return 10 #"special orange"
-    
     elif( r in range(900,1200) and g in range(90,290) and b in range(1270,1276)):
         return 3 #"violet"
 
@@ -85,6 +91,7 @@ def identifyCandy(r,g,b):
         return 13 #"special violet"
     
     elif( r in range(1220,1276) and g in range(900,1270) and b in range(0,270)):
+        print(r,g,b)
         return 5 # "yellow"
     
     elif( r in range(1000,1276) and g in range(0,30) and b in range(0,10)):
@@ -141,7 +148,7 @@ def testSensor():
 
             #print("r g b -> ({},{},{})".format(r,g,b))
 
-            if(not(r in range(35,105) and g in range(60,130) and b in range(65,140)) and r+g+b>=200):
+            if(not(r in range(35,105) and g in range(60,130) and b in range(65,140)) and r+g+b>=220):
                 candy = identifyPackedCandy(r,g,b)
                 print("packed candy")
                 board_matrix[counter_y][counter_x]=candy
