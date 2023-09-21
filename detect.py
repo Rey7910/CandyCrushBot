@@ -16,12 +16,25 @@ board_matrix = [
     [0,0,0,0,0,0,0,0,0],
 ]
 
+def reportUnknownCandy(y,x,r,g,b):
+    print("Candy[{}][{}] with({},{},{})".format(y,x,r,g,b))
+
+def reportCandy(y,x,candy):
+    print("Candy[{}][{}]: {}".format(y,x,candy))
+
+
 def printMatrix(matrix):
 
     for i in range(9):
         for j in range(9):
             print(matrix[i][j],end=" ")
         print()
+
+
+
+def identifyPackedCandy(r,g,b):
+    if (r in range(80,150) and g in range(120,220) and b in range(50,130)):
+        return 24 # green packed candy
 
 
 def identifyCandy(r,g,b):
@@ -76,12 +89,11 @@ def identifyCandy(r,g,b):
 
 
 
-
 def testSensor():
         
-    pic = pyautogui.screenshot(region = (125,60,790,690))
+    #pic = pyautogui.screenshot(region = (125,60,790,690))
 
-    pic.save('game.png')
+    #pic.save('game.png')
 
     image = Image.open('game.png')
 
@@ -107,7 +119,23 @@ def testSensor():
 
             else:
                 new_color=(255,255,255)
-            
+
+            #print("Pixel: ({},{},{})".format(r,g,b))
+            r,g,b = image.getpixel((x-30,y-24))
+            draw.point((x-30, y-24), fill=new_color)
+
+            #print("r g b -> ({},{},{})".format(r,g,b))
+
+            if(not(r in range(35,105) and g in range(60,130) and b in range(65,140))):
+                candy = identifyPackedCandy(r,g,b)
+                board_matrix[counter_y][counter_x]=candy
+                counter_y+=1
+                total_r=0
+                total_g=0
+                total_b=0
+                continue
+
+
             r,g,b = image.getpixel((x,y))
             total_b+=b
             total_r+=r
@@ -152,11 +180,10 @@ def testSensor():
             #print("Candy[{}][{}] with({},{},{})".format(counter_y,counter_x,total_r,total_g,total_b))
 
             if(candy==100):
-                print("Candy[{}][{}] with({},{},{})".format(counter_y,counter_x,total_r,total_g,total_b))
-                
+                reportUnknownCandy(counter_y,counter_x,total_r,total_g,total_b)
             
             else:
-                print("Candy[{}][{}]: {}".format(counter_y,counter_x,candy))
+                reportCandy(counter_y,counter_x,candy)
 
 
             board_matrix[counter_y][counter_x]=candy
