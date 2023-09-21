@@ -35,6 +35,21 @@ def printMatrix(matrix):
 def identifyPackedCandy(r,g,b):
     if (r in range(80,150) and g in range(120,220) and b in range(50,130)):
         return 24 # green packed candy
+    
+    elif(r in range(100,250) and g in range(70,150) and b in range(210,260)):
+        return 23 # violet packed candy
+    
+    elif(r in range(230,280) and g in range(150,250) and b in range(0,130)):
+        print("my: ",r,g,b)
+        return 25 # orange packed candy
+
+    elif(r in range(160,350) and g in range(100,250) and b in range(0,150)):
+        print("my: ",r,g,b)
+        return 20 # orange packed candy
+    
+    else:
+        print(r,g,b)
+        return 100
 
 
 def identifyCandy(r,g,b):
@@ -52,14 +67,14 @@ def identifyCandy(r,g,b):
     elif( (r in range(780,850) and g in range(1100,1276) and b in range(550,650)) or (r in range(380,500) and g in range(1100,1276) and b in range(180,280))):
         return 14 # "special green"
     
-    elif( (r in range(1200,1276) and g in range(650,750) and b in range(600,700)) or (r in range(1100,1200) and g in range(300,420) and b in range(300,420))):
+    elif( (r in range(1200,1276) and g in range(650,750) and b in range(600,710)) or (r in range(1100,1250) and g in range(200,420) and b in range(160,420))):
         return 12 # "special red"
 
     elif( r in range(400,830) and g in range(940,1200) and b in range(1130,1260)):
 
         return 11 # "special blue"   
     
-    elif( (r in range(400,700) and g in range(800,1100) and b in range(1000,1276)) or (r in range(1200,1270) and g in range(800,1100) and b in range(200,700))):
+    elif( (r in range(400,700) and g in range(800,1100) and b in range(1000,1276)) or (r in range(1200,1270) and g in range(800,1140) and b in range(200,860))):
         print(r,g,b)
         return 10 #"special orange"
     
@@ -91,11 +106,11 @@ def identifyCandy(r,g,b):
 
 def testSensor():
         
-    #pic = pyautogui.screenshot(region = (125,60,790,690))
+    pic = pyautogui.screenshot(region = (125,60,790,690))
 
-    #pic.save('game.png')
+    pic.save('game1.png')
 
-    image = Image.open('game.png')
+    image = Image.open('game1.png')
 
     width, height = image.size
 
@@ -126,8 +141,9 @@ def testSensor():
 
             #print("r g b -> ({},{},{})".format(r,g,b))
 
-            if(not(r in range(35,105) and g in range(60,130) and b in range(65,140))):
+            if(not(r in range(35,105) and g in range(60,130) and b in range(65,140)) and r+g+b>=200):
                 candy = identifyPackedCandy(r,g,b)
+                print("packed candy")
                 board_matrix[counter_y][counter_x]=candy
                 counter_y+=1
                 total_r=0
@@ -178,12 +194,12 @@ def testSensor():
 
             
             #print("Candy[{}][{}] with({},{},{})".format(counter_y,counter_x,total_r,total_g,total_b))
-
+            
             if(candy==100):
                 reportUnknownCandy(counter_y,counter_x,total_r,total_g,total_b)
             
             else:
-                reportCandy(counter_y,counter_x,candy)
+                reportCandy(counter_y,counter_x,candy) 
 
 
             board_matrix[counter_y][counter_x]=candy
@@ -200,19 +216,15 @@ def testSensor():
         
 
 
-    image.save('game modified.png')
+    image.save('game1 modified.png')
     
     printMatrix(board_matrix)
+    print("-----------------------")
 
 
 
 
 
 testSensor()
+#Sensor()
 
-# blue if((counter_y==0 and counter_x==1) or (counter_y==0 and counter_x==3) or (counter_y==0 and counter_x==7) or (counter_y==3 and counter_x==1) or (counter_y==4 and counter_x==4) or (counter_y==5 and counter_x==1) or (counter_y==6 and counter_x==4) or (counter_y==6 and counter_x==5) or (counter_y==7 and counter_x==0) or (counter_y==7 and counter_x==2) or (counter_y==8 and counter_x==5)):
-# green if((counter_y==0 and counter_x==0) or (counter_y==0 and counter_x==2) or (counter_y==0 and counter_x==6) or (counter_y==1 and counter_x==3) or (counter_y==3 and counter_x==0) or (counter_y==3 and counter_x==3) or (counter_y==3 and counter_x==5) or (counter_y==3 and counter_x==6) or (counter_y==4 and counter_x==0) or (counter_y==5 and counter_x==6) or (counter_y==6 and counter_x==0) or (counter_y==7 and counter_x==7) or (counter_y==8 and counter_x==2)):
-# orange if((counter_y==1 and counter_x==5) or (counter_y==2 and counter_x==0) or (counter_y==2 and counter_x==1) or (counter_y==3 and counter_x==7) or (counter_y==4 and counter_x==6) or (counter_y==6 and counter_x==7) or (counter_y==7 and counter_x==3) or (counter_y==7 and counter_x==4) or (counter_y==8 and counter_x==3) or (counter_y==8 and counter_x==6)):
-# red if((counter_y==2 and counter_x==4) or (counter_y==2 and counter_x==6) or (counter_y==2 and counter_x==7) or (counter_y==3 and counter_x==2) or (counter_y==4 and counter_x==3) or (counter_y==5 and counter_x==3) or (counter_y==5 and counter_x==5) or (counter_y==6 and counter_x==1) or (counter_y==7 and counter_x==5)): 
-# yellow if((counter_y==0 and counter_x==5) or (counter_y==1 and counter_x==0) or (counter_y==1 and counter_x==6) or (counter_y==2 and counter_x==2) or (counter_y==2 and counter_x==3) or (counter_y==2 and counter_x==5) or (counter_y==4 and counter_x==5) or (counter_y==5 and counter_x==0) or (counter_y==5 and counter_x==2) or (counter_y==5 and counter_x==7) or (counter_y==6 and counter_x==3) or (counter_y==7 and counter_x==1) or (counter_y==7 and counter_x==6) or (counter_y==8 and counter_x==1) or (counter_y==8 and counter_x==7)): 
-# violet if((counter_y==0 and counter_x==4) or (counter_y==1 and counter_x==1) or (counter_y==1 and counter_x==2) or (counter_y==1 and counter_x==4) or (counter_y==1 and counter_x==7) or (counter_y==3 and counter_x==4) or (counter_y==4 and counter_x==1) or (counter_y==4 and counter_x==2) or (counter_y==5 and counter_x==4) or (counter_y==6 and counter_x==6) or (counter_y==8 and counter_x==0) or (counter_y==8 and counter_x==4)):
