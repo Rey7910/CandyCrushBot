@@ -36,7 +36,7 @@ def identifyCandy(r,g,b):
     elif( r in range(1200,1276) and g in range(1000,1090) and b in range(130,200)):
         return 15 # "special yellow"
     
-    elif( r in range(1200,1276) and g in range(650,750) and b in range(600,700)):
+    elif( (r in range(1200,1276) and g in range(650,750) and b in range(600,700)) or (r in range(1100,1200) and g in range(300,420) and b in range(300,420))):
         return 12 # "special red"
 
     elif( r in range(400,700) and g in range(940,1200) and b in range(1150,1260)):
