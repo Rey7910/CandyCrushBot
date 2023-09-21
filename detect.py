@@ -39,7 +39,7 @@ def identifyPackedCandy(r,g,b):
 
     if (r in range(80,150) and g in range(120,220) and b in range(50,130)):
         print("my: ",r,g,b)
-        return 24 # green packed candy
+        return 25 # green packed candy
     
     elif(r in range(100,250) and g in range(70,150) and b in range(210,260)):
         print("my: ",r,g,b)
@@ -47,7 +47,7 @@ def identifyPackedCandy(r,g,b):
     
     elif(r in range(230,280) and g in range(150,250) and b in range(90,130)):
         print("my: ",r,g,b)
-        return 25 # yellow packed candy
+        return 24 # yellow packed candy
 
     elif(r in range(160,350) and g in range(100,250) and b in range(0,150)):
         print("my: ",r,g,b)
@@ -79,11 +79,11 @@ def identifyCandy(r,g,b):
 
     elif( (r in range(1200,1276) and g in range(1000,1090) and b in range(130,200)) or (r in range(1200,1276) and g in range(1000,1200) and b in range(380,500))):
         print(r,g,b)
-        return 15 # "special yellow"
+        return 14 # "special yellow"
     
     elif( (r in range(780,850) and g in range(1100,1276) and b in range(550,650)) or (r in range(380,500) and g in range(1100,1276) and b in range(180,280))):
         print(r,g,b)
-        return 14 # "special green"
+        return 15 # "special green"
     
     elif( (r in range(1200,1276) and g in range(650,750) and b in range(600,710)) or (r in range(1100,1250) and g in range(200,420) and b in range(160,420))):
         return 12 # "special red"
@@ -102,13 +102,13 @@ def identifyCandy(r,g,b):
     
     elif( r in range(1220,1276) and g in range(900,1270) and b in range(0,270)):
         print(r,g,b)
-        return 5 # "yellow"
+        return 4 # "yellow"
     
     elif( r in range(1000,1276) and g in range(0,30) and b in range(0,10)):
         return 2 #"red"
     
     elif( r in range(200,280) and g in range(770,920) and b in range(0,10)):
-        return 4 #"green"
+        return 5 #"green"
     
     elif( r in range(1270,1276) and g in range(700,910) and b in range(50,400)):
         return 0 #"orange"
@@ -377,6 +377,6 @@ def testSensor():
 
 
 
-#testSensor()
-sensor()
+testSensor()
+#sensor()
 
