@@ -12,7 +12,7 @@ def identifyCandy(r,g,b):
     elif( r in range(1100,1276) and g in range(1000,1200) and b in range(700,1000)):
         return "special orange"
     
-    elif( r in range(400,700) and g in range(800,1100) and b in range(1000,1276)):
+    elif( (r in range(400,700) and g in range(800,1100) and b in range(1000,1276)) or (r in range(1200,1250) and g in range(800,1100) and b in range(200,700))):
         return "special orange"
     
     elif( r in range(900,1100) and g in range(250,400) and b in range(1200,1276)):
@@ -30,7 +30,7 @@ def identifyCandy(r,g,b):
     elif( r in range(200,280) and g in range(770,920) and b in range(0,10)):
         return "green"
     
-    elif( r in range(1270,1276) and g in range(700,900) and b in range(50,380)):
+    elif( r in range(1270,1276) and g in range(700,910) and b in range(50,400)):
         return "orange"
     
     elif( r in range(100,255) and g in range(540,800) and b in range(1200,1276)):
@@ -43,11 +43,11 @@ def identifyCandy(r,g,b):
 
 
 def testSensor():
-    time.sleep(3)
+    #time.sleep(3)
         
-    pic = pyautogui.screenshot(region = (125,60,710,690))
+    #pic = pyautogui.screenshot(region = (125,60,790,690))
 
-    pic.save('game.png')
+    #pic.save('game.png')
 
     image = Image.open('game.png')
 
