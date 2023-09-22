@@ -59,7 +59,7 @@ def identifyPackedCandy(r,g,b):
         print("my: ",r,g,b)
         return 20 # orange packed candy
     
-    elif(r in range(20,120) and g in range(100,250) and b in range(150,300)):
+    elif(r in range(20,120) and g in range(100,270) and b in range(150,300)):
         print("my: ",r,g,b)
         return 21 # blue packed candy
     
@@ -105,7 +105,7 @@ def sensorLoop():
     counter_rep=0
     last_movement_x = 0
     last_movement_y = 0
-    while(counter<=200):
+    while(True):
         counter+=1
         pic = pyautogui.screenshot(region = (125,60,790,690))
 
@@ -198,11 +198,6 @@ def sensorLoop():
 
                 candy = identifyCandy(pixels)
 
-                if(x==last_movement_y and y==last_movement_x and changeMatrix==True):
-                    changeMatrix=False
-                    candy+=1
-
-
                 '''
                 if(candy==8):
                     candy=3
@@ -212,9 +207,6 @@ def sensorLoop():
                     print(pixels)
                     continue '''
     
-
-
-
                 board_matrix[counter_y][counter_x]=candy
 
 
@@ -236,29 +228,37 @@ def sensorLoop():
         x=tupla[0][1]
         y = tupla[0][0]
 
+        '''
+        if(last_movement_x==x and last_movement_y==y):
+            counter_rep+=1
+
+        else:
+            counter_rep=0
+
         print(tupla)
 
-        if(last_movement_y==y and last_movement_x==x and counter_rep>5):
-            changeMatrix = True
-            continue
+        if(counter_rep>5):
+            break
+            continue 
         
-        else:
+        else: '''
 
-            counter_rep=0
-            last_movement_y=y
-            last_movement_x=x
+        last_movement_y=y
+        last_movement_x=x
 
-            if(tupla[1] == (0,1)):
-                actuators.crash_candy(x,y,'right')
+        if(tupla[1] == (0,1)):
+            actuators.crash_candy(x,y,'right')
 
-            elif(tupla[1] == (0,-1)):
-                actuators.crash_candy(x,y,'left')
+        elif(tupla[1] == (0,-1)):
+            actuators.crash_candy(x,y,'left')
 
-            elif(tupla[1] == (-1,0)):
-                actuators.crash_candy(x,y,'up')
+        elif(tupla[1] == (-1,0)):
+            actuators.crash_candy(x,y,'up')
 
-            elif(tupla[1] == (1,0)):
-                actuators.crash_candy(x,y,'down') 
+        elif(tupla[1] == (1,0)):
+            actuators.crash_candy(x,y,'down') 
+        
+        time.sleep(0.2)
 
         
 
@@ -358,7 +358,6 @@ def sensor():
 
             if(candy==8):
                 candy=3
-                flag=True
                 print("ERROR: ",end="")
                 print("{},{}: ".format(counter_y,counter_x),end="")
                 print(pixels)
@@ -406,5 +405,6 @@ def sensor():
 
 
 sensorLoop()
+#sensor()
 
 
