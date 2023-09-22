@@ -67,5 +67,3 @@ def test_full_movements():
             crash_candy(x,y,'right')
         
 
-
-test_full_movements()
