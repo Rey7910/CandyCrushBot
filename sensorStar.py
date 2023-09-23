@@ -108,10 +108,10 @@ def identifyCandy(pixels):
         elif(i[0] in range(5,50) and i[1] in range(120,270) and i[2] in range(220,256)):
         
             for i in pixels:
-                if(i[0]>180):
+                if(i[0]>100):
                     counter+=1
                 
-                if(counter>=2):
+                if(counter>=1):
                     return 11 
             
 
@@ -135,11 +135,11 @@ def identifyCandy(pixels):
         
         elif(i[0] in range(240,256) and i[1] in range(0,20) and i[2] in range(-1,20)):
             
+
             for i in pixels:
-                if(i[2]>150):
-                    counter+=1
-                if(counter>=2):
+                if(i[2]>100):
                     return 12
+                
 
             return 2 # red
         
@@ -163,12 +163,14 @@ def identifyCandy(pixels):
 
 def sensorLoop():
 
+    counter=0
     while(True):
+        counter+=1
         pic = pyautogui.screenshot(region = (125,60,790,690))
 
-        pic.save('game3.png')
+        pic.save('game{}.png'.format(counter))
 
-        image = Image.open('game3.png')
+        image = Image.open('game{}.png'.format(counter))
 
         width, height = image.size
 
@@ -347,7 +349,7 @@ def sensor():
 
         #pic.save('game5.png')
 
-        image = Image.open('game1.png')
+        image = Image.open('game57.png')
 
         width, height = image.size
 
@@ -417,17 +419,18 @@ def sensor():
                 draw.point((x+10, y-10), fill=new_color)
                 pixels.append((r,g,b))
 
+                '''
                 r,g,b = image.getpixel((x-10,y+10))
                 draw.point((x-10, y+10), fill=new_color)
-                pixels.append((r,g,b))
+                pixels.append((r,g,b)) '''
 
                 ############################################ EDGE
 
-                '''
-                r,g,b = image.getpixel((x,y+10))
+            
+                r,g,b = image.getpixel((x,y-5))
                 #print("Pixel down: ({},{},{})".format(r,g,b))
-                draw.point((x, y+10), fill=new_color)
-                '''
+                draw.point((x, y-5), fill=new_color)
+                
                 '''
                 pixels.append((r,g,b))
 
@@ -464,6 +467,8 @@ def sensor():
     
                 board_matrix[counter_y][counter_x]=candy
 
+                if(counter_y==6 and counter_x==2):
+                    print(pixels)
 
                 counter_y+=1
 
@@ -514,5 +519,5 @@ def sensor():
 
 
 
-sensorLoop()
-#sensor()
+#sensorLoop()
+sensor()
