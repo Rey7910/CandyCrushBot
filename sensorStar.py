@@ -65,7 +65,7 @@ def identifyPackedCandy(r,g,b):
     
     else:
         restartSensor+=1
-        return 100
+        return 8
 
 
 
@@ -74,24 +74,85 @@ agent = boardSolver.BoardSolver()
 
 def identifyCandy(pixels):
 
+    counter=0
+
     for i in pixels:
-        if(i[0] in range(30,66) and i[1] in range(159,196) and i[2] in range(0,20)):
+        if(i[0] in range(30,66) and i[1] in range(159,255) and i[2] in range(-1,21)):
+           
+            for i in pixels:
+                if(i[0]>180):
+                    counter+=1
+                
+                if(counter>=2):
+                    return 15 
+              
+
+            #print(pixels)
             return 5 # green
 
-        elif(i[0] in range(240,256) and i[1] in range(110,160) and i[2] in range(0,20)):
+        elif(i[0] in range(240,256) and i[1] in range(110,160) and i[2] in range(-1,20)):
+            
+            
+            for i in pixels:
+                if(i[2]>180):
+                    counter+=1
+                
+                if(counter>=2):
+                    return 10 
+            
+          
+                
             return 0 # orange
+
         
         elif(i[0] in range(5,50) and i[1] in range(120,270) and i[2] in range(220,256)):
+        
+            for i in pixels:
+                if(i[0]>180):
+                    counter+=1
+                
+                if(counter>=2):
+                    return 11 
             
+
+
             return 1 #blue
         
-        elif(i[0] in range(200,256) and i[1] in range(200,255) and i[2] in range(0,20)):
-            return 4 # yellow
+        elif(i[0] in range(200,256) and i[1] in range(200,255) and i[2] in range(-1,20)):
+            #print(pixels)
+            #return 4 # yellow
+            for i in pixels:
+                if(i[2]>50):
+                    counter+=1
+                
+                if(counter>=2):
+                    return 14 
+            
+            
+            
+            return 4
+
         
-        elif(i[0] in range(240,256) and i[1] in range(0,20) and i[2] in range(0,20)):
+        elif(i[0] in range(240,256) and i[1] in range(0,20) and i[2] in range(-1,20)):
+            
+            for i in pixels:
+                if(i[2]>150):
+                    counter+=1
+                if(counter>=2):
+                    return 12
+
             return 2 # red
         
         elif(i[0] in range(160,230) and i[1] in range(15,80) and i[2] in range(230,256)):
+            #print(pixels)
+            #return 3
+
+            for i in pixels:
+                if(i[2]!=255):
+                    counter+=1
+                if(counter>=2):
+                    return 13
+
             return 3 # violet
         
         
@@ -101,21 +162,15 @@ def identifyCandy(pixels):
 
 
 def sensorLoop():
-    counter=0
-    counter_rep=0
-    last_movement_x = 0
-    last_movement_y = 0
+
     while(True):
-        counter+=1
         pic = pyautogui.screenshot(region = (125,60,790,690))
 
-        pic.save('game1.png')
+        pic.save('game3.png')
 
-        image = Image.open('game1.png')
+        image = Image.open('game3.png')
 
         width, height = image.size
-
-        global restartSensor
 
         new_color = (255, 255, 255)
 
@@ -123,18 +178,26 @@ def sensorLoop():
 
         counter_x=0
         counter_y=0
-        
-        flag = False
 
+        special_candies=[]
         for x in range(45,width,88):
             
             for y in range(25,height,80):
-                
-                flag = False
+              
                 pixels = []
                 #print("Pixel: ({},{},{})".format(r,g,b))
                 r,g,b = image.getpixel((x-30,y-24))
-                draw.point((x-30, y-24), fill=new_color)
+
+                '''if(not(r in range(35,105) and g in range(60,130) and b in range(65,140)) and r+g+b>=220):
+                    candy = identifyPackedCandy(r,g,b)
+                    print("packed candy")
+                    board_matrix[counter_y][counter_x]=candy
+                    special_candies.append((counter_y,counter_x))
+                    counter_y+=1
+                    continue '''
+                #draw.point((x-30, y-24), fill=new_color)
+                
+                
 
                 #print("r g b -> ({},{},{})".format(r,g,b))
                 '''
@@ -152,16 +215,203 @@ def sensorLoop():
                 #print("Pixel center: ({},{},{})".format(r,g,b))
                 draw.point((x, y), fill=new_color)
 
+
+                pixels.append((r,g,b))
+
+              
+
+                ############################################ EDGE
+                r,g,b = image.getpixel((x+10,y+10))
+                #draw.point((x+10, y+10), fill=new_color)
+
+
+                pixels.append((r,g,b))
+
+            
+
+                r,g,b = image.getpixel((x-10,y-10))
+                #draw.point((x-10, y-10), fill=new_color)
+                pixels.append((r,g,b))
+
+           
+
+                r,g,b = image.getpixel((x+10,y-10))
+                #draw.point((x+10, y-10), fill=new_color)
+                pixels.append((r,g,b))
+
+                r,g,b = image.getpixel((x-10,y+10))
+                #draw.point((x-10, y+10), fill=new_color)
+                pixels.append((r,g,b))
+
+           
+
+                ############################################ EDGE
+                
+                '''
+                r,g,b = image.getpixel((x,y+10))
+                #print("Pixel down: ({},{},{})".format(r,g,b))
+                draw.point((x, y+10), fill=new_color)
+
+                
+                pixels.append((r,g,b))
+
+                
+                r,g,b = image.getpixel((x,y-10))
+
+                #print("Pixel up: ({},{},{})".format(r,g,b))
+                #draw.point((x, y-10), fill=new_color)
+                pixels.append((r,g,b)) '''
+
+
+                r,g,b = image.getpixel((x+10,y))
+                #print("Pixel right: ({},{},{})".format(r,g,b))
+                #draw.point((x+10, y), fill=new_color)
+                pixels.append((r,g,b))
+
+
+                
+                r,g,b = image.getpixel((x-10,y))
+                #draw.point((x-10, y), fill=new_color)
+                pixels.append((r,g,b))
+
+     
+                
+
+
+                candy = identifyCandy(pixels)
+
+                if(candy in range(9,16)):
+                    special_candies.append((counter_y,counter_x))
+
+                '''
+                if(candy==8):
+                    candy=3
+                    flag=True
+                    print("ERROR: ",end="")
+                    print("{},{}: ".format(counter_y,counter_x),end="")
+                    print(pixels)
+                    continue '''
+    
+                board_matrix[counter_y][counter_x]=candy
+
+
+                counter_y+=1
+
+
+            counter_y=0
+            counter_x+=1
+
+
+        image.save('game1 modified.png')
+
+        printMatrix(board_matrix)
+        print("-----------------------")    
+        
+        if(len(special_candies)!=1):
+            special_candies=tuple(special_candies)
+            
+        
+
+        agente = boardSolver.BoardSolver()
+
+        tupla = agente.solve(board_matrix,special_candies)
+        
+        x=tupla[0][1]
+        y = tupla[0][0]
+
+
+        if(tupla[1] == (0,1)):
+            actuators.crash_candy(x,y,'right')
+
+        elif(tupla[1] == (0,-1)):
+            actuators.crash_candy(x,y,'left')
+
+        elif(tupla[1] == (-1,0)):
+            actuators.crash_candy(x,y,'up')
+
+        elif(tupla[1] == (1,0)):
+            actuators.crash_candy(x,y,'down') 
+
+        else:
+            print("ERROR")
+        
+        time.sleep(0.2)
+        
+
+        
+
+
+def sensor():
+
+        #pic = pyautogui.screenshot(region = (125,60,790,690))
+
+        #pic.save('game5.png')
+
+        image = Image.open('game1.png')
+
+        width, height = image.size
+
+        new_color = (255, 255, 255)
+
+        draw = ImageDraw.Draw(image)
+
+        counter_x=0
+        counter_y=0
+        #special_candies = ()
+        special_candies=[]
+
+
+
+        for x in range(45,width,88):
+            
+            for y in range(25,height,80):
+                mult_g=0
+                mult_b=0
+                pixels = []
+                #print("Pixel: ({},{},{})".format(r,g,b))
+                r,g,b = image.getpixel((x-30,y-24))
+                draw.point((x-30, y-24), fill=new_color)
+                '''
+                if(g>=180):
+                    mult_g+=1
+                if(b>=180):
+                    mult_b+=1 '''
+
+                #print("r g b -> ({},{},{})".format(r,g,b))
+                
+                '''if(not(r in range(35,105) and g in range(60,130) and b in range(65,140)) and r+g+b>=220):
+                    candy = identifyPackedCandy(r,g,b)
+                    print("packed candy")
+                    board_matrix[counter_y][counter_x]=candy
+                    special_candies.append((counter_y,counter_x))
+                    counter_y+=1
+                    continue '''
+                
+                #print("{},{}".format(counter_y,counter_x))
+
+                r,g,b = image.getpixel((x,y))
+
+                #print("Pixel center: ({},{},{})".format(r,g,b))
+                draw.point((x, y), fill=new_color)
+
                 pixels.append((r,g,b))
 
                 ############################################ EDGE
                 r,g,b = image.getpixel((x+10,y+10))
                 draw.point((x+10, y+10), fill=new_color)
+
+
                 pixels.append((r,g,b))
+
 
                 r,g,b = image.getpixel((x-10,y-10))
                 draw.point((x-10, y-10), fill=new_color)
                 pixels.append((r,g,b))
+
+                if(g>=180):
+                    mult_g+=1
+                if(b>=180):
+                    mult_b+=1
 
                 r,g,b = image.getpixel((x+10,y-10))
                 draw.point((x+10, y-10), fill=new_color)
@@ -173,28 +423,33 @@ def sensorLoop():
 
                 ############################################ EDGE
 
-                
+                '''
                 r,g,b = image.getpixel((x,y+10))
                 #print("Pixel down: ({},{},{})".format(r,g,b))
                 draw.point((x, y+10), fill=new_color)
+                '''
+                '''
                 pixels.append((r,g,b))
 
                 
                 r,g,b = image.getpixel((x,y-10))
 
                 #print("Pixel up: ({},{},{})".format(r,g,b))
-                draw.point((x, y-10), fill=new_color)
-                pixels.append((r,g,b))
+                #draw.point((x, y-10), fill=new_color)
+                pixels.append((r,g,b)) '''
 
 
                 r,g,b = image.getpixel((x+10,y))
                 #print("Pixel right: ({},{},{})".format(r,g,b))
                 draw.point((x+10, y), fill=new_color)
                 pixels.append((r,g,b))
+
+
                 
                 r,g,b = image.getpixel((x-10,y))
                 draw.point((x-10, y), fill=new_color)
                 pixels.append((r,g,b))
+
 
                 candy = identifyCandy(pixels)
 
@@ -224,27 +479,20 @@ def sensorLoop():
         
         agente = boardSolver.BoardSolver()
         
-        tupla = agente.solve(board_matrix)
+        if(len(special_candies)!=1):
+            special_candies=tuple(special_candies)
+            
+        
+        print(special_candies)
+
+        tupla = agente.solve(board_matrix,special_candies)
         x=tupla[0][1]
         y = tupla[0][0]
 
-        '''
-        if(last_movement_x==x and last_movement_y==y):
-            counter_rep+=1
-
-        else:
-            counter_rep=0
-
         print(tupla)
-
-        if(counter_rep>5):
-            break
-            continue 
         
-        else: '''
 
-        last_movement_y=y
-        last_movement_x=x
+        '''
 
         if(tupla[1] == (0,1)):
             actuators.crash_candy(x,y,'right')
@@ -257,154 +505,14 @@ def sensorLoop():
 
         elif(tupla[1] == (1,0)):
             actuators.crash_candy(x,y,'down') 
+
+        else:
+            print("ERROR")
         
-        time.sleep(0.2)
-
-        
-
-
-def sensor():
-
-    pic = pyautogui.screenshot(region = (125,60,790,690))
-
-    pic.save('game1.png')
-
-    image = Image.open('game1.png')
-
-    width, height = image.size
-
-    global restartSensor
-
-    new_color = (255, 255, 255)
-
-    draw = ImageDraw.Draw(image)
-
-    counter_x=0
-    counter_y=0
-    
-    flag = False
-
-    for x in range(45,width,88):
-        
-        for y in range(25,height,80):
-            
-            flag = False
-            pixels = []
-            #print("Pixel: ({},{},{})".format(r,g,b))
-            r,g,b = image.getpixel((x-30,y-24))
-            draw.point((x-30, y-24), fill=new_color)
-
-            #print("r g b -> ({},{},{})".format(r,g,b))
-            '''
-            if(not(r in range(35,105) and g in range(60,130) and b in range(65,140)) and r+g+b>=220):
-                candy = identifyPackedCandy(r,g,b)
-                print("packed candy")
-                board_matrix[counter_y][counter_x]=candy
-                counter_y+=1
-                continue '''
-            
-            #print("{},{}".format(counter_y,counter_x))
-
-            r,g,b = image.getpixel((x,y))
-
-            #print("Pixel center: ({},{},{})".format(r,g,b))
-            draw.point((x, y), fill=new_color)
-
-            pixels.append((r,g,b))
-
-            ############################################ EDGE
-            r,g,b = image.getpixel((x+10,y+10))
-            draw.point((x+10, y+10), fill=new_color)
-            pixels.append((r,g,b))
-
-            r,g,b = image.getpixel((x-10,y-10))
-            draw.point((x-10, y-10), fill=new_color)
-            pixels.append((r,g,b))
-
-            r,g,b = image.getpixel((x+10,y-10))
-            draw.point((x+10, y-10), fill=new_color)
-            pixels.append((r,g,b))
-
-            r,g,b = image.getpixel((x-10,y+10))
-            draw.point((x-10, y+10), fill=new_color)
-            pixels.append((r,g,b))
-
-            ############################################ EDGE
-
-            
-            r,g,b = image.getpixel((x,y+10))
-            #print("Pixel down: ({},{},{})".format(r,g,b))
-            draw.point((x, y+10), fill=new_color)
-            pixels.append((r,g,b))
-
-            
-            r,g,b = image.getpixel((x,y-10))
-
-            #print("Pixel up: ({},{},{})".format(r,g,b))
-            draw.point((x, y-10), fill=new_color)
-            pixels.append((r,g,b))
-
-
-            r,g,b = image.getpixel((x+10,y))
-            #print("Pixel right: ({},{},{})".format(r,g,b))
-            draw.point((x+10, y), fill=new_color)
-            pixels.append((r,g,b))
-            
-            r,g,b = image.getpixel((x-10,y))
-            draw.point((x-10, y), fill=new_color)
-            pixels.append((r,g,b))
-
-            candy = identifyCandy(pixels)
-
-            if(candy==8):
-                candy=3
-                print("ERROR: ",end="")
-                print("{},{}: ".format(counter_y,counter_x),end="")
-                print(pixels)
-                continue
-
-            
-
-
-            board_matrix[counter_y][counter_x]=candy
-
-
-            counter_y+=1
-
-        counter_y=0
-        counter_x+=1
-
-    image.save('game1 modified.png')
-
-    printMatrix(board_matrix)
-    print("-----------------------")    
-    '''
-    agente = boardSolver.BoardSolver()
-    
-    tupla = agente.solve(board_matrix)
-    x=tupla[0][1]
-    y = tupla[0][0]
-
-    print(tupla)
-
-    if(tupla[1] == (0,1)):
-        actuators.crash_candy(x,y,'right')
-
-    elif(tupla[1] == (0,-1)):
-        actuators.crash_candy(x,y,'left')
-
-    elif(tupla[1] == (-1,0)):
-        actuators.crash_candy(x,y,'up')
-
-    elif(tupla[1] == (1,0)):
-        actuators.crash_candy(x,y,'down') 
-
-    time.sleep(1)  '''
+        time.sleep(0.2) '''
 
 
 
 
 sensorLoop()
 #sensor()
-
-
