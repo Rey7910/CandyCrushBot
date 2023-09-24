@@ -3,6 +3,7 @@ import time
 from PIL import Image, ImageDraw
 import boardSolver
 import actuators
+import multiprocessing
 
 restartSensor=0
 board_matrix = [
@@ -206,14 +207,14 @@ def sensorLoop():
         elif(tupla[1] == (1,0)):
             actuators.crash_candy(x,y,'down') 
 
-        time.sleep(0.13)
+        time.sleep(0.2)
 
 
 
 def sensor():
     pic = pyautogui.screenshot(region = (125,60,790,690))
-    pic.save('game1.png')
-    image = Image.open('game1.png')
+    pic.save('game100.png')
+    image = Image.open('game100.png')
     width, height = image.size
     global restartSensor
     new_color = (255, 255, 255)
@@ -311,5 +312,19 @@ def sensor():
     time.sleep(1)  '''
 
 
-sensorLoop()
 #sensor()
+
+
+def imprimir_valor(valor):
+    while(True):
+        sensor()
+
+
+if __name__ == "__main__":
+
+    proceso1 = multiprocessing.Process(target=sensorLoop)
+    proceso2 = multiprocessing.Process(target=sensor)
+
+    proceso1.start()
+    proceso2.start()
+

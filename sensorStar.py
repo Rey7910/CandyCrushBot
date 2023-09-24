@@ -300,9 +300,11 @@ def sensorLoop():
 
         else:
             print("ERROR")
+
         
         time.sleep(0.2)
-        
+    
+         
 
         
 
