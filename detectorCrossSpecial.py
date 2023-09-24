@@ -147,7 +147,7 @@ def sensorLoop():
     while(True):
         counter+=1
         pic = pyautogui.screenshot(region = (125,60,790,690))
-
+        allow=True
         pic.save('game{}.png'.format(counter))
 
         image = Image.open('game{}.png'.format(counter))
@@ -286,10 +286,9 @@ def sensorLoop():
                 pixels.append((r,g,b))
                 acumulator_r+=r
                 acumulator_b+=b
+                
 
-
-
-                print("Path [{}][{}]".format(counter_y,counter_x))
+                #print("Path [{}][{}]".format(counter_y,counter_x))
 
                 candy = identifyCandy(pixels, acumulator_r, acumulator_b)
     
@@ -306,10 +305,10 @@ def sensorLoop():
             counter_x+=1
 
 
-        image.save('game1 modified.png')
+        #image.save('game1 modified.png')
 
-        printMatrix(board_matrix)
-        print("-----------------------")    
+        #printMatrix(board_matrix)
+        #print("-----------------------")    
         
         agente = boardSolver.BoardSolver()
         
@@ -317,13 +316,13 @@ def sensorLoop():
             special_candies=tuple(special_candies)
             
         
-        print(special_candies)
+        #print(special_candies)
 
-        tupla = agente.solve(board_matrix,special_candies)
+        tupla = agente.solve(board_matrix)#,special_candies)
         x=tupla[0][1]
         y = tupla[0][0]
 
-        print(tupla)
+        #print(tupla)
         
 
         
@@ -356,7 +355,7 @@ def sensor():
 
         #pic.save('game5.png')
 
-        image = Image.open('game58.png')
+        image = Image.open('game27.png')
 
         width, height = image.size
 
@@ -381,8 +380,8 @@ def sensor():
                 r,g,b = image.getpixel((x-30,y-24))
                 draw.point((x-30, y-24), fill=new_color)
 
-                r,g,b = image.getpixel((x+50,y-50))
-                draw.point((x+50, y-50), fill=new_color)
+                r,g,b = image.getpixel((x+35,y+20))
+                draw.point((x+35, y+20), fill=new_color)
                 print((r,g,b))
                 '''
                 if(g>=180):
@@ -497,6 +496,14 @@ def sensor():
                 acumulator_r+=r
                 acumulator_b+=b
 
+                background_counter=0
+                for i in pixels:
+                    
+                    if(i[0] in range(40,100) and i[1] in range(0,130) and i[2] in range(0,140)):
+                        background_counter+=1
+
+                if(background_counter>=3):
+                    allow=False
 
 
                 print("Path [{}][{}]".format(counter_y,counter_x))
@@ -558,5 +565,5 @@ def sensor():
 
 
 
-#sensorLoop()
-sensor()
+sensorLoop()
+#sensor()

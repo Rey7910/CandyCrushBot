@@ -79,26 +79,12 @@ def identifyCandy(pixels):
     for i in pixels:
         if(i[0] in range(30,66) and i[1] in range(159,255) and i[2] in range(-1,21)):
            
-            for i in pixels:
-                if(i[0]>180):
-                    counter+=1
-                
-                if(counter>=2):
-                    return 15 
               
 
             #print(pixels)
             return 5 # green
 
         elif(i[0] in range(240,256) and i[1] in range(110,160) and i[2] in range(-1,20)):
-            
-            
-            for i in pixels:
-                if(i[2]>180):
-                    counter+=1
-                
-                if(counter>=2):
-                    return 10 
             
           
                 
@@ -107,12 +93,6 @@ def identifyCandy(pixels):
         
         elif(i[0] in range(5,50) and i[1] in range(120,270) and i[2] in range(220,256)):
         
-            for i in pixels:
-                if(i[0]>100):
-                    counter+=1
-                
-                if(counter>=1):
-                    return 11 
             
 
 
@@ -121,13 +101,6 @@ def identifyCandy(pixels):
         elif(i[0] in range(200,256) and i[1] in range(200,255) and i[2] in range(-1,20)):
             #print(pixels)
             #return 4 # yellow
-            for i in pixels:
-                if(i[2]>50):
-                    counter+=1
-                
-                if(counter>=2):
-                    return 14 
-            
             
             
             return 4
@@ -136,22 +109,13 @@ def identifyCandy(pixels):
         elif(i[0] in range(240,256) and i[1] in range(0,20) and i[2] in range(-1,20)):
             
 
-            for i in pixels:
-                if(i[2]>100):
-                    return 12
-                
+
 
             return 2 # red
         
         elif(i[0] in range(160,230) and i[1] in range(15,80) and i[2] in range(230,256)):
             #print(pixels)
             #return 3
-
-            for i in pixels:
-                if(i[2]!=255):
-                    counter+=1
-                if(counter>=2):
-                    return 13
 
             return 3 # violet
         
@@ -359,8 +323,7 @@ def sensor():
 
         counter_x=0
         counter_y=0
-        #special_candies = ()
-        special_candies=[]
+
 
 
 
@@ -467,9 +430,6 @@ def sensor():
     
                 board_matrix[counter_y][counter_x]=candy
 
-                if(counter_y==6 and counter_x==2):
-                    print(pixels)
-
                 counter_y+=1
 
 
@@ -483,14 +443,11 @@ def sensor():
         print("-----------------------")    
         
         agente = boardSolver.BoardSolver()
-        
-        if(len(special_candies)!=1):
-            special_candies=tuple(special_candies)
             
         
         print(special_candies)
 
-        tupla = agente.solve(board_matrix,special_candies)
+        tupla = agente.solve(board_matrix)
         x=tupla[0][1]
         y = tupla[0][0]
 
@@ -519,5 +476,5 @@ def sensor():
 
 
 
-#sensorLoop()
-sensor()
+sensorLoop()
+#sensor()
