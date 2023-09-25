@@ -148,9 +148,9 @@ def sensorLoop():
         counter+=1
         pic = pyautogui.screenshot(region = (125,60,790,690))
         allow=True
-        pic.save('game{}.png'.format(counter))
+        pic.save('game200.png'.format(counter))
 
-        image = Image.open('game{}.png'.format(counter))
+        image = Image.open('game200.png'.format(counter))
 
         width, height = image.size
 

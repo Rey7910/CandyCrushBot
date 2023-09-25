@@ -68,5 +68,4 @@ def test_full_movements():
         
 
 
-test_actuators(1,8)
 

@@ -2,7 +2,7 @@ import pyautogui
 import time
 from PIL import Image, ImageDraw
 import boardSolver
-import actuators
+import fastActuator
 
 restartSensor=0
 board_matrix = [
@@ -78,11 +78,12 @@ def identifyCandy(pixels):
     
     return 8
 def sensorLoop():
+    counter=0
     counter_rep=0
     last_movement_x = 0
     last_movement_y = 0
-    while(True):
-
+    while(counter<=10):
+        counter+=1
         pic = pyautogui.screenshot(region = (125,60,790,690))
 
         pic.save('game1.png')
@@ -168,9 +169,9 @@ def sensorLoop():
                 counter_y+=1
             counter_y=0
             counter_x+=1
-        #image.save('game1 modified.png')
-        #printMatrix(board_matrix)
-        #print("-----------------------")    
+        image.save('game1 modified.png')
+        printMatrix(board_matrix)
+        print("-----------------------")    
         
         agente = boardSolver.BoardSolver()
         
@@ -194,16 +195,16 @@ def sensorLoop():
         last_movement_x=x
 
         if(tupla[1] == (0,1)):
-            actuators.crash_candy(x,y,'right')
+            fastActuator.crash_candy(x,y,'right')
 
         elif(tupla[1] == (0,-1)):
-            actuators.crash_candy(x,y,'left')
+            fastActuator.crash_candy(x,y,'left')
 
         elif(tupla[1] == (-1,0)):
-            actuators.crash_candy(x,y,'up')
+            fastActuator.crash_candy(x,y,'up')
 
         elif(tupla[1] == (1,0)):
-            actuators.crash_candy(x,y,'down') 
+            fastActuator.crash_candy(x,y,'down') 
 
         time.sleep(0.13)
 
