@@ -34,7 +34,14 @@ class BoardSolver:
         '''
         self.dy = (-1, 1, 0, 0)
         self.dx = (0, 0, -1, 1)
-        self.basic = [(), ()]
+        '''
+            0. Make a chocolate
+            1. Combine two specials
+            2. Make a explosive
+            3. Make a 4
+            4. Normal move
+        '''
+        self.best = [(), (), (), (), ()]
         self.choco = ()
 
     """
@@ -49,6 +56,7 @@ class BoardSolver:
     def solve(self, board: list, specialLocs: list = ()) -> tuple:
         # Initializes the internal states
         self.board = board
+        self.best = [(), (), (), (), ()]
         self.choco = ()
         for r in range(9):
             for c in range(9):
@@ -65,47 +73,35 @@ class BoardSolver:
 
         # Checks the special candies
         for specialLoc in specialLocs:
-            movement = self.checkSpecial(specialLoc[0], specialLoc[1])
-            if movement != ():
-                return movement
+            if self.best[1] == ():
+                movement = self.checkSpecial(specialLoc[0], specialLoc[1])
+                if movement != ():
+                    self.best[1] = movement
 
-            movement = self.checkAll(specialLoc[0], specialLoc[1],
-                                     self.board[specialLoc[0]][specialLoc[1]])
-            if movement != ():
-                return movement
-
-            if self.basic[0] == ():
-                self.checkBasic(specialLoc[0], specialLoc[1],
-                                self.board[specialLoc[0]][specialLoc[1]])
+            self.checkAll(specialLoc[0], specialLoc[1],
+                          self.board[specialLoc[0]][specialLoc[1]])
 
             self.checkBoard[specialLoc[0]][specialLoc[1]] = True
 
+        for specialLoc in specialLocs:
             # Checks in the surroundings of the special candy
-            movement = self.searchZone(specialLoc[0], specialLoc[1])
-            if movement != ():
-                return movement
+            self.searchZone(specialLoc[0], specialLoc[1])
 
         # Checks the rest of the board
         for nr in range(9):
             for nc in range(9):
                 if not self.checkBoard[nr][nc]:
-                    movement = self.checkAll(nr, nc, self.board[nr][nc])
-                    if movement != ():
-                        return movement
+                    self.checkAll(nr, nc, self.board[nr][nc])
 
-                    if self.basic[1] == ():
-                        self.checkBasic(nr, nc, self.board[nr][nc])
+        # Returns best possible movement
+        for movement in self.best:
+            if movement != ():
+                return movement
 
-        # Returns a basic movement if there's no better option
-        if self.basic[0] != ():
-            return self.basic[0]
-        elif self.basic[1] != ():
-            return self.basic[1]
-        else:
-            # Uses the chocolate when there's no other option
-            return self.choco
+        # Uses the chocolate when there's no other option
+        return self.choco
 
-    def searchZone(self, r: int, c: int) -> tuple:
+    def searchZone(self, r: int, c: int) -> None:
         cornerR = r-2
         cornerC = c-2
 
@@ -117,35 +113,32 @@ class BoardSolver:
                     sc = cornerC+j
 
                     if sc >= 0 and sc < 9 and not self.checkBoard[sr][sc]:
-                        movement = self.checkAll(sr, sc, self.board[sr][sc])
-                        if movement != ():
-                            return movement
-
-                        if self.basic[1] == ():
-                            self.checkBasic(sr, sc, self.board[sr][sc])
-
+                        self.checkAll(sr, sc, self.board[sr][sc])
                         self.checkBoard[sr][sc] = True
 
-        return ()
+    def checkAll(self, r: int, c: int, kind: int) -> None:
+        if self.best[0] == ():
+            movement = self.checkChoco(r, c, self.board[r][c])
+            if movement != ():
+                self.best[0] = movement
 
-    def checkAll(self, r: int, c: int, kind: int) -> tuple:
-        movement = self.checkChoco(r, c, self.board[r][c])
-        if movement != ():
-            return movement
+        if self.best[2] == ():
+            movement = self.checkT(r, c, self.board[r][c])
+            if movement != ():
+                self.best[2] = movement
 
-        movement = self.checkT(r, c, self.board[r][c])
-        if movement != ():
-            return movement
+        if self.best[2] == ():
+            movement = self.checkL(r, c, self.board[r][c])
+            if movement != ():
+                self.best[2] = movement
 
-        movement = self.checkL(r, c, self.board[r][c])
-        if movement != ():
-            return movement
+        if self.best[3] == ():
+            movement = self.check4(r, c, self.board[r][c])
+            if movement != ():
+                self.best[3] = movement
 
-        movement = self.check4(r, c, self.board[r][c])
-        if movement != ():
-            return movement
-
-        return ()
+        if self.best[4] == ():
+            self.checkBasic(r, c, self.board[r][c])
 
     def checkBasic(self, r: int, c: int, kind: int) -> None:
         if self.checkBasic1(r, c, kind):
@@ -439,10 +432,8 @@ class BoardSolver:
                     self.board[nr][nc-1] % 10 == ckind and
                     nc+1 < 9 and
                     self.board[nr][nc+1] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (-1, 0))
 
-                self.basic[1] = ((r, c), (-1, 0))
+                self.basic[4] = ((r, c), (-1, 0))
 
                 return True
 
@@ -454,10 +445,8 @@ class BoardSolver:
                     self.board[nr][nc-1] % 10 == ckind and
                     nc+1 < 9 and
                     self.board[nr][nc+1] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (1, 0))
 
-                self.basic[1] = ((r, c), (1, 0))
+                self.basic[4] = ((r, c), (1, 0))
 
                 return True
 
@@ -469,10 +458,8 @@ class BoardSolver:
                     self.board[nr-1][nc] % 10 == ckind and
                     nr+1 < 9 and
                     self.board[nr+1][nc] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (0, -1))
 
-                self.basic[1] = ((r, c), (0, -1))
+                self.basic[4] = ((r, c), (0, -1))
 
                 return True
 
@@ -484,10 +471,8 @@ class BoardSolver:
                     self.board[nr-1][nc] % 10 == ckind and
                     nr+1 < 9 and
                     self.board[nr+1][nc] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (0, 1))
 
-                self.basic[1] = ((r, c), (0, 1))
+                self.basic[4] = ((r, c), (0, 1))
 
                 return True
 
@@ -501,10 +486,8 @@ class BoardSolver:
             if (nc-2 >= 0 and
                     self.board[nr][nc-2] % 10 == ckind and
                     self.board[nr][nc-1] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (-1, 0))
 
-                self.basic[1] = ((r, c), (-1, 0))
+                self.basic[4] = ((r, c), (-1, 0))
 
                 return True
 
@@ -515,10 +498,8 @@ class BoardSolver:
             if (nc+2 < 9 and
                     self.board[nr][nc+1] % 10 == ckind and
                     self.board[nr][nc+2] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (1, 0))
 
-                self.basic[1] = ((r, c), (1, 0))
+                self.basic[4] = ((r, c), (1, 0))
 
                 return True
 
@@ -529,10 +510,8 @@ class BoardSolver:
             if (nr+2 < 9 and
                     self.board[nr+2][nc] % 10 == ckind and
                     self.board[nr+1][nc] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (0, -1))
 
-                self.basic[1] = ((r, c), (0, -1))
+                self.basic[4] = ((r, c), (0, -1))
 
                 return True
 
@@ -543,10 +522,8 @@ class BoardSolver:
             if (nr-2 >= 0 and
                     self.board[nr-2][nc] % 10 == ckind and
                     self.board[nr-1][nc] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (0, 1))
 
-                self.basic[1] = ((r, c), (0, 1))
+                self.basic[4] = ((r, c), (0, 1))
 
                 return True
 
@@ -560,10 +537,8 @@ class BoardSolver:
             if (nc+2 < 9 and
                     self.board[nr][nc+2] % 10 == ckind and
                     self.board[nr][nc+1] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (-1, 0))
 
-                self.basic[1] = ((r, c), (-1, 0))
+                self.basic[4] = ((r, c), (-1, 0))
 
                 return True
 
@@ -574,10 +549,8 @@ class BoardSolver:
             if (nc-2 >= 0 and
                     self.board[nr][nc-1] % 10 == ckind and
                     self.board[nr][nc-2] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (1, 0))
 
-                self.basic[1] = ((r, c), (1, 0))
+                self.basic[4] = ((r, c), (1, 0))
 
                 return True
 
@@ -588,10 +561,8 @@ class BoardSolver:
             if (nr-2 >= 0 and
                     self.board[nr-2][nc] % 10 == ckind and
                     self.board[nr-1][nc] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (0, -1))
 
-                self.basic[1] = ((r, c), (0, -1))
+                self.basic[4] = ((r, c), (0, -1))
 
                 return True
 
@@ -602,10 +573,8 @@ class BoardSolver:
             if (nr+2 < 9 and
                     self.board[nr+2][nc] % 10 == ckind and
                     self.board[nr+1][nc] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (0, 1))
 
-                self.basic[1] = ((r, c), (0, 1))
+                self.basic[4] = ((r, c), (0, 1))
 
                 return True
 
@@ -619,10 +588,8 @@ class BoardSolver:
             if (nr-2 >= 0 and
                     self.board[nr-2][nc] % 10 == ckind and
                     self.board[nr-1][nc] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (-1, 0))
 
-                self.basic[1] = ((r, c), (-1, 0))
+                self.basic[4] = ((r, c), (-1, 0))
 
                 return True
 
@@ -633,10 +600,8 @@ class BoardSolver:
             if (nr+2 < 9 and
                     self.board[nr+2][nc] % 10 == ckind and
                     self.board[nr+1][nc] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (1, 0))
 
-                self.basic[1] = ((r, c), (1, 0))
+                self.basic[4] = ((r, c), (1, 0))
 
                 return True
 
@@ -647,10 +612,8 @@ class BoardSolver:
             if (nc-2 >= 0 and
                     self.board[nr][nc-2] % 10 == ckind and
                     self.board[nr][nc-1] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (0, -1))
 
-                self.basic[1] = ((r, c), (0, -1))
+                self.basic[4] = ((r, c), (0, -1))
 
                 return True
 
@@ -661,9 +624,7 @@ class BoardSolver:
             if (nc+2 < 9 and
                     self.board[nr][nc+2] % 10 == ckind and
                     self.board[nr][nc+1] % 10 == ckind):
-                if kind >= 10:
-                    self.basic[0] = ((r, c), (0, 1))
 
-                self.basic[1] = ((r, c), (0, 1))
+                self.basic[4] = ((r, c), (0, 1))
 
                 return True
