@@ -82,7 +82,6 @@ def sensorLoop():
     last_movement_x = 0
     last_movement_y = 0
     while(True):
-
         pic = pyautogui.screenshot(region = (125,60,790,690))
 
         pic.save('game1.png')
@@ -205,11 +204,13 @@ def sensorLoop():
         elif(tupla[1] == (1,0)):
             actuators.crash_candy(x,y,'down') 
 
+        st_2 = time.time()
         time.sleep(0.13)
 
 
 
 def sensor():
+    st = time.time()
     pic = pyautogui.screenshot(region = (125,60,790,690))
     pic.save('game1.png')
     image = Image.open('game1.png')
@@ -291,7 +292,9 @@ def sensor():
         counter_x+=1
     image.save('game1 modified.png')
     printMatrix(board_matrix)
-    print("-----------------------")    
+    print("-----------------------")
+    st_2 = time.time()
+    print(st_2-st)    
     '''
     agente = boardSolver.BoardSolver()
     
