@@ -433,7 +433,7 @@ class BoardSolver:
                     nc+1 < 9 and
                     self.board[nr][nc+1] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (-1, 0))
+                self.best[4] = ((r, c), (-1, 0))
 
                 return True
 
@@ -446,7 +446,7 @@ class BoardSolver:
                     nc+1 < 9 and
                     self.board[nr][nc+1] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (1, 0))
+                self.best[4] = ((r, c), (1, 0))
 
                 return True
 
@@ -459,7 +459,7 @@ class BoardSolver:
                     nr+1 < 9 and
                     self.board[nr+1][nc] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (0, -1))
+                self.best[4] = ((r, c), (0, -1))
 
                 return True
 
@@ -472,7 +472,7 @@ class BoardSolver:
                     nr+1 < 9 and
                     self.board[nr+1][nc] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (0, 1))
+                self.best[4] = ((r, c), (0, 1))
 
                 return True
 
@@ -487,7 +487,7 @@ class BoardSolver:
                     self.board[nr][nc-2] % 10 == ckind and
                     self.board[nr][nc-1] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (-1, 0))
+                self.best[4] = ((r, c), (-1, 0))
 
                 return True
 
@@ -499,7 +499,7 @@ class BoardSolver:
                     self.board[nr][nc+1] % 10 == ckind and
                     self.board[nr][nc+2] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (1, 0))
+                self.best[4] = ((r, c), (1, 0))
 
                 return True
 
@@ -511,7 +511,7 @@ class BoardSolver:
                     self.board[nr+2][nc] % 10 == ckind and
                     self.board[nr+1][nc] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (0, -1))
+                self.best[4] = ((r, c), (0, -1))
 
                 return True
 
@@ -523,7 +523,7 @@ class BoardSolver:
                     self.board[nr-2][nc] % 10 == ckind and
                     self.board[nr-1][nc] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (0, 1))
+                self.best[4] = ((r, c), (0, 1))
 
                 return True
 
@@ -538,7 +538,7 @@ class BoardSolver:
                     self.board[nr][nc+2] % 10 == ckind and
                     self.board[nr][nc+1] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (-1, 0))
+                self.best[4] = ((r, c), (-1, 0))
 
                 return True
 
@@ -550,7 +550,7 @@ class BoardSolver:
                     self.board[nr][nc-1] % 10 == ckind and
                     self.board[nr][nc-2] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (1, 0))
+                self.best[4] = ((r, c), (1, 0))
 
                 return True
 
@@ -562,7 +562,7 @@ class BoardSolver:
                     self.board[nr-2][nc] % 10 == ckind and
                     self.board[nr-1][nc] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (0, -1))
+                self.best[4] = ((r, c), (0, -1))
 
                 return True
 
@@ -574,7 +574,7 @@ class BoardSolver:
                     self.board[nr+2][nc] % 10 == ckind and
                     self.board[nr+1][nc] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (0, 1))
+                self.best[4] = ((r, c), (0, 1))
 
                 return True
 
@@ -589,7 +589,7 @@ class BoardSolver:
                     self.board[nr-2][nc] % 10 == ckind and
                     self.board[nr-1][nc] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (-1, 0))
+                self.best[4] = ((r, c), (-1, 0))
 
                 return True
 
@@ -601,7 +601,7 @@ class BoardSolver:
                     self.board[nr+2][nc] % 10 == ckind and
                     self.board[nr+1][nc] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (1, 0))
+                self.best[4] = ((r, c), (1, 0))
 
                 return True
 
@@ -613,7 +613,7 @@ class BoardSolver:
                     self.board[nr][nc-2] % 10 == ckind and
                     self.board[nr][nc-1] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (0, -1))
+                self.best[4] = ((r, c), (0, -1))
 
                 return True
 
@@ -625,6 +625,6 @@ class BoardSolver:
                     self.board[nr][nc+2] % 10 == ckind and
                     self.board[nr][nc+1] % 10 == ckind):
 
-                self.basic[4] = ((r, c), (0, 1))
+                self.best[4] = ((r, c), (0, 1))
 
                 return True
